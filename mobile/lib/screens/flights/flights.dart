@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile/screens/flights/flights.dart';
-import 'package:mobile/screens/register/register.dart';
+import 'package:mobile/database/database_manager.dart';
+import 'package:mobile/database/dog.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class Flights extends StatefulWidget {
+  const Flights({Key? key}) : super(key: key);
 
   @override
-  _LoginState createState() => _LoginState();
+  _FlightsState createState() => _FlightsState();
 }
 
-class _LoginState extends State<Login> {
-  bool _obscurePassword = true;
+class _FlightsState extends State<Flights> {
+  final textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,36 +38,25 @@ class _LoginState extends State<Login> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                         const SizedBox(height: 50),
-                        const Text('Sign In',
+                        const Text('Flights',
                             style: TextStyle(
                                 color: Color.fromARGB(255, 0, 115, 161),
                                 fontSize: 40,
                                 fontWeight: FontWeight.bold)),
                         const SizedBox(height: 50),
                         TextFormField(
-                            keyboardType: TextInputType.emailAddress,
+                            keyboardType: TextInputType.text,
                             decoration: const InputDecoration(
-                                labelText: "Email",
+                                labelText: "Origin Airport",
                                 border: OutlineInputBorder(),
-                                prefixIcon: Icon(Icons.email))),
+                                prefixIcon: Icon(Icons.flight))),
                         const SizedBox(height: 25),
                         TextFormField(
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: _obscurePassword,
-                            decoration: InputDecoration(
-                                labelText: "Password",
-                                border: const OutlineInputBorder(),
-                                prefixIcon: const Icon(Icons.lock),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscurePassword = !_obscurePassword;
-                                    });
-                                  },
-                                  icon: _obscurePassword
-                                      ? const Icon(Icons.visibility)
-                                      : const Icon(Icons.visibility_off),
-                                ))),
+                            keyboardType: TextInputType.text,
+                            decoration: const InputDecoration(
+                                labelText: "Destination Airport",
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.flight))),
                         const SizedBox(height: 50),
                         Container(
                             height: 60,
@@ -79,11 +68,8 @@ class _LoginState extends State<Login> {
                                   Colors.greenAccent
                                 ])),
                             child: MaterialButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => const Flights()));
-                                },
-                                child: const Text('LOGIN',
+                                onPressed: () {},
+                                child: const Text('RESERVE',
                                     style: TextStyle(
                                         fontSize: 25,
                                         color: Colors.white,
@@ -95,10 +81,9 @@ class _LoginState extends State<Login> {
                         ),
                         TextButton(
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const Register()));
+                              Navigator.pop(context);
                             },
-                            child: const Text('Create New Account'))
+                            child: const Text('Sign out'))
                       ])))
             ])));
   }
