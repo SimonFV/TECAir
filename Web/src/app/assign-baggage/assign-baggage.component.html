@@ -1,0 +1,25 @@
+<app-nav-admin></app-nav-admin>
+<div class="text-center mt-5 col-auto  d-grid col-9 mx-auto">
+    <h2>Baggage Assignment</h2>
+</div>
+<form [formGroup]="form" (submit)="getData()">
+<div class="col-auto mt-3  col-6 mx-auto">
+    <div class="form-floating">
+        <input id="user" class="form-control" type="text" formControlName="user_ID" placeholder="User ID">
+        <label for="floatingInput">User ID</label>
+    </div>
+    <div class="form-floating">
+        <input id="color" class="form-control mt-2" type="text" formControlName="color" placeholder="Color">
+        <label for="floatingInput">Color</label>
+    </div>
+    <div class="form-floating">
+        <input id="weight" class="form-control mt-2" type="text" formControlName="weight" placeholder="Weight">
+        <label for="floatingInput">Weight</label>
+    </div>
+    <div class="text-center mt-3" id="alertDiv"> </div>
+</div>
+
+<div class="text-center mt-3">
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+</div>
+</form>
