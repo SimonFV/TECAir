@@ -1,0 +1,29 @@
+<div id="user"></div>
+<div class="text-center mt-5 col-auto  d-grid col-9 mx-auto">
+    <h2>Choose Your Flight!</h2>
+</div>
+<form [formGroup]="form" (submit)="getData()">
+<div class="col-auto mt-3  col-6 mx-auto">
+    <div class="form-floating">
+        <input id="Bagcart ID" list="datalistOptions" class="form-control mt-2" type="text" formControlName="from" placeholder="From">
+        <label for="floatingInput">From</label>
+    </div>
+
+    <div class="form-floating">
+        <input id="Flight ID" list="datalistOptions" class="form-control mt-2" type="text"formControlName="to" placeholder="To">
+        <label for="floatingInput">To</label>
+    </div>
+    <div class="text-center mt-3" id="alertDiv"></div>
+    <datalist id="datalistOptions">
+        <option value="San Francisco">
+        <option value="New York">
+        <option value="Seattle">
+        <option value="Los Angeles">
+        <option value="Chicago">
+    </datalist>
+</div>
+
+<div class="text-center mt-3 d-grid d-md-flex justify-content-center gap-2">
+    <button class="btn btn-lg btn-primary btn-block">Search</button>
+</div>
+</form>

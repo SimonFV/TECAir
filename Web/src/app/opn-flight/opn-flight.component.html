@@ -1,0 +1,46 @@
+<app-nav-admin></app-nav-admin>
+<div class="text-center mt-5 col-auto  d-grid col-9 mx-auto">
+    <h2>Log Flight </h2>
+</div>
+<form [formGroup]="form" (submit)="getData()">
+    <div class="col-auto mt-3  col-6 mx-auto">
+        <div class="form-floating">
+            <input id="airplane ID" class="form-control" type="text" formControlName="airplane_ID"
+                placeholder="Airplane ID">
+            <label for="floatingInput">Airplane ID</label>
+        </div>
+        <div class="form-floating">
+            <input id="Origin" class="form-control mt-2" type="text" formControlName="from" placeholder="From">
+            <label for="floatingInput">From</label>
+        </div>
+
+        <div formArrayName="stops" *ngFor="let stop of stops.controls; let i= index">
+            <div [formGroupName]="i">
+                <div class=" input-group mb-3 mt-2 ">
+                    <div class="form-floating flex-grow-1">
+                        <input id="stop" class="form-control " type="text" formControlName="stop" placeholder="Stop">
+                        <label for="floatingInput">Stop</label>
+                    </div>
+                    <button type="button" id="button-addon1" class="btn btn-outline-danger" (click)="deleteStop(i)">Remove stop</button>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="mt-1">
+            <button type="button" class="btn btn-link" (click)="addStop()">Add a stop</button>
+        </div>
+
+
+
+        <div class="form-floating">
+            <input id="to" class="form-control mt-2" type="text" formControlName="to" placeholder="To">
+            <label for="floatingInput">To</label>
+        </div>
+        <div class="text-center mt-3" id="alertDiv"> </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+    </div>
+</form>
