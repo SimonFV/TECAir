@@ -22,11 +22,11 @@ namespace api.Controller
     [Route("[controller]")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly JwtConfig _jwtConfig;
 
         public AuthenticationController(
-            UserManager<IdentityUser> userManager,
+            UserManager<User> userManager,
             IOptionsMonitor<JwtConfig> optionsMonitor)
         {
             _userManager = userManager;
@@ -53,7 +53,15 @@ namespace api.Controller
                     });
                 }
 
-                var newUser = new IdentityUser() { Email = user.Email, UserName = user.UserName };
+                var newUser = new User()
+                {
+                    Email = user.Email,
+                    UserName = user.UserName,
+                    LastName1 = user.LastName1,
+                    LastName2 = user.LastName2,
+                    Ssn = user.Ssn,
+                    University = user.University
+                };
                 var isCreated = await _userManager.CreateAsync(newUser, user.Password);
                 if (isCreated.Succeeded)
                 {
@@ -134,7 +142,7 @@ namespace api.Controller
             });
         }
 
-        private string GenerateJwtToken(IdentityUser user)
+        private string GenerateJwtToken(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -144,7 +152,7 @@ namespace api.Controller
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim("Id", user.Id),
+                    new Claim("Id", user.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
