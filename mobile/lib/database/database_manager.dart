@@ -14,7 +14,6 @@ class DatabaseManager {
   Future<Database> _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, 'dogs.db');
-    print(path);
     return await openDatabase(
       path,
       version: 1,

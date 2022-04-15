@@ -4,6 +4,7 @@ import 'package:mobile/database/database_manager.dart';
 import 'package:mobile/screens/login/login.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:http/http.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

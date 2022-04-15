@@ -10,7 +10,7 @@ class Dog {
   });
 
   factory Dog.fromMap(Map<String, dynamic> json) =>
-      new Dog(id: json['id'], name: json['name'], age: json['age']);
+      Dog(id: json['id'], name: json['name'], age: json['age']);
 
   Map<String, dynamic> toMap() {
     return {
