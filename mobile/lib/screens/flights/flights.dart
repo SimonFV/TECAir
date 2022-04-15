@@ -4,7 +4,9 @@ import 'package:mobile/database/database_manager.dart';
 import 'package:mobile/database/dog.dart';
 
 class Flights extends StatefulWidget {
-  const Flights({Key? key}) : super(key: key);
+  final String accessToken;
+
+  const Flights({Key? key, required this.accessToken}) : super(key: key);
 
   @override
   _FlightsState createState() => _FlightsState();

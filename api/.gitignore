@@ -3,3 +3,4 @@ obj
 .vscode
 .vs
 api.csproj.user
+app.db

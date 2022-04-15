@@ -56,11 +56,14 @@ namespace api.Controller
                 var newUser = new User()
                 {
                     Email = user.Email,
-                    UserName = user.UserName,
+                    UserName = user.FirstName + user.Ssn,
+                    FirstName = user.FirstName,
                     LastName1 = user.LastName1,
                     LastName2 = user.LastName2,
                     Ssn = user.Ssn,
-                    University = user.University
+                    PhoneNumber = user.PhoneNumber,
+                    University = user.University,
+                    SchoolId = user.SchoolId
                 };
                 var isCreated = await _userManager.CreateAsync(newUser, user.Password);
                 if (isCreated.Succeeded)
