@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
     }
     try {
       final response = await post(
-          Uri.parse("http://192.168.1.7:5000/Authentication/login"),
+          Uri.parse("http://192.168.1.7:5001/Authentication/login"),
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
