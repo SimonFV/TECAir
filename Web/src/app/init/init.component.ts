@@ -16,6 +16,7 @@ export class InitComponent implements OnInit {
     
   }
   data:any=[];
+  student:boolean=false;
   ngOnInit(): void {
     this.form= this.formBuilder.group({
       //user_Role: ['',[]],
@@ -24,8 +25,8 @@ export class InitComponent implements OnInit {
       LastName2: ['',[]],
       Ssn: ['',[]],
       University: ['',[]],
-      //university: this.formBuilder.array([]),
-      //user_Phone: ['',[]],
+      //SchoolId: this.formBuilder.array([]),
+      PhoneNumber: ['',[]],
       Email: ['',[]],
       Password: ['',[]]
       
@@ -55,20 +56,20 @@ export class InitComponent implements OnInit {
     }
   }
 
-
-
-  get university(){
-    return this.form.get('university') as FormArray;
+  get SchoolId(){
+    return this.form.get('SchoolId') as FormArray;
   }
   addStudent(){
-    const uni_ID_FormGroup= this.formBuilder.group({
-      university: ''
+    this.student=true;
+    const SchoolId_FormGroup= this.formBuilder.group({
+      SchoolId: ''
     });
-    this.university.push(uni_ID_FormGroup);
+    this.SchoolId.push(SchoolId_FormGroup);
   }
   
   deleteStudent(){
-    this.university.clear();
+    this.student=false;
+    this.SchoolId.clear();
   }
 }
 
