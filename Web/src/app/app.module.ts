@@ -15,6 +15,7 @@ import { CloseFlightComponent } from './close-flight/close-flight.component';
 import { CheckInComponent } from './check-in/check-in.component';
 import { AssignBaggageComponent } from './assign-baggage/assign-baggage.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
       {path: 'flights', component:FlightsComponent},

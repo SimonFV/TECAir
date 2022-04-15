@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-init',
@@ -8,39 +9,45 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class InitComponent implements OnInit {
   public form!: FormGroup;
-  constructor(private formBuilder: FormBuilder) { 
+  constructor(private formBuilder: FormBuilder,
+    private service: ApiService) { 
     
   }
 
   ngOnInit(): void {
     this.form= this.formBuilder.group({
-      user_Role: ['',[]],
-      user_Name: ['',[]],
-      user_Last_Name: ['',[]],
-      user_Scn_LastName: ['',[]],
-      user_ID: ['',[]],
-      user_Uni_ID: this.formBuilder.array([]),
-      user_Phone: ['',[]],
-      user_Email: ['',[]],
-      user_Pass: ['',[]]
+      //user_Role: ['',[]],
+      userName: ['',[]],
+      lastName1: ['',[]],
+      lastName2: ['',[]],
+      ssn: ['',[]],
+      university: ['',[]],
+      //university: this.formBuilder.array([]),
+      //user_Phone: ['',[]],
+      email: ['',[]],
+      password: ['',[]]
       
     });
   }
   getData(){
-    console.log(this.form.value);
+    this.service.postRegister(this.form.value).subscribe(resp=>{
+      console.log(resp);
+      
+    })
+    //console.log(this.form.value);
   }
-  get user_Uni_ID(){
-    return this.form.get('user_Uni_ID') as FormArray;
+  get university(){
+    return this.form.get('university') as FormArray;
   }
   addStudent(){
     const uni_ID_FormGroup= this.formBuilder.group({
-      user_Uni_ID: ''
+      university: ''
     });
-    this.user_Uni_ID.push(uni_ID_FormGroup);
+    this.university.push(uni_ID_FormGroup);
   }
   
   deleteStudent(){
-    this.user_Uni_ID.clear();
+    this.university.clear();
 
   }
 }
