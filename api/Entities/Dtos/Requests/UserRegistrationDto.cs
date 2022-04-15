@@ -5,7 +5,7 @@ namespace api.Dtos.Requests
     public class UserRegistrationDto
     {
         [Required]
-        public string UserName { get; set; }
+        public string FirstName { get; set; }
         [Required]
         public string LastName1 { get; set; }
         [Required]
@@ -16,8 +16,10 @@ namespace api.Dtos.Requests
         [Required]
         public string Password { get; set; }
         [Required]
-        public string University { get; set; }
-        [Required]
         public string Ssn { get; set; }
+        [Required]
+        public string PhoneNumber { get; set; }
+        public string SchoolId { get; set; }
+        public string University { get; set; }
     }
 }

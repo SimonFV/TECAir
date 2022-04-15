@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/screens/flights/flights.dart';
@@ -31,7 +30,7 @@ class _LoginState extends State<Login> {
   void loginPost() async {
     if (userEmail.text.isEmpty || userPassword.text.isEmpty) {
       setState(() {
-        errorMessage = "Empty.";
+        errorMessage = "Empty field.";
       });
       return;
     }
@@ -43,7 +42,7 @@ class _LoginState extends State<Login> {
             "Accept": "application/json"
           },
           body: jsonEncode(
-              {"Email": userEmail.text, "Password": userPassword.text}));
+              {"email": userEmail.text, "password": userPassword.text}));
       final jsonBody = jsonDecode(response.body);
       if (jsonBody['success'] == true) {
         accessToken = jsonBody['token'];
@@ -52,7 +51,7 @@ class _LoginState extends State<Login> {
         });
       } else {
         setState(() {
-          errorMessage = jsonBody['error'].toString();
+          errorMessage = jsonBody['errors'][0];
         });
         return;
       }
@@ -63,8 +62,8 @@ class _LoginState extends State<Login> {
       return;
     }
 
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const Flights()));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Flights(accessToken: accessToken)));
   }
 
   @override
