@@ -7,52 +7,52 @@
     <form [formGroup]="form" (submit)="getData()" style="max-width: 300px;margin: auto;">
         <h5 class="mt-3">I am a:</h5>
 
-        <div class="form-check mt-3 ">
-            <!--<input class="form-check-input" type="radio" formControlName="user_Role"(change)="deleteStudent()" value="User"
+        <!--<div class="form-check mt-3 ">
+            <input class="form-check-input" type="radio" formControlName="user_Role"(change)="deleteStudent()" value="User"
                 id="flexRadioDefault1">
-            <label class="form-check-label" for="flexRadioDefault1"> User </label>-->
+            <label class="form-check-label" for="flexRadioDefault1"> User </label>
         </div>
 
         <div class="form-check mt-1">
-            <!--<input class="form-check-input" type="radio" formControlName="user_Role" (change)="deleteStudent()"value="Admin"
+            <input class="form-check-input" type="radio" formControlName="user_Role" (change)="deleteStudent()"value="Admin"
                 id="flexRadioDefault1">
-            <label class="form-check-label" for="flexRadioDefault1"> Airport Admin </label>-->
+            <label class="form-check-label" for="flexRadioDefault1"> Airport Admin </label>
         </div>
 
         <div class="form-check mt-1">
-           <!-- <input class="form-check-input" type="radio" formControlName="user_Role"(change)="addStudent()" value="Student"
+           <input class="form-check-input" type="radio" formControlName="user_Role"(change)="addStudent()" value="Student"
                 id="flexRadioDefault1">
-            <label class="form-check-label" for="flexRadioDefault1"> Student </label>-->
-        </div>
+            <label class="form-check-label" for="flexRadioDefault1"> Student </label>
+        </div>-->
 
         <div class="form-floating">
-            <input type="Name" id="Name" class="form-control mb-1" placeholder="Name" formControlName="userName">
+            <input type="Name" id="Name" class="form-control mb-1" placeholder="Name" formControlName="UserName">
             <label for="floatingInput">Name</label>
         </div>
 
         <div class="form-floating">
             <input type="Last Name" id="Last Name" placeholder="Last Name" class="form-control mb-1"
-                formControlName="lastName1">
+                formControlName="LastName1">
             <label for="floatingInput">Last Name</label>
         </div>
         <div class="form-floating">
             <input type="2° Last Name" id="2° Last Name" class="form-control mb-1" placeholder="2° Last Name"
-                formControlName="lastName2">
+                formControlName="LastName2">
             <label for="floatingInput">2° Last Name</label>
         </div>
         <div class="form-floating">
-            <input type="ID" id="ID" placeholder="ID" class="form-control mb-1" formControlName="ssn">
+            <input type="ID" id="ID" placeholder="ID" class="form-control mb-1" formControlName="Ssn">
             <label for="floatingInput">ID</label>
         </div>
         <div class="form-floating">
-            <input type="ID" id="university" placeholder="university" class="form-control mb-1" formControlName="university">
+            <input type="ID" id="university" placeholder="university" class="form-control mb-1" formControlName="University">
             <label for="floatingInput">University</label>
         </div>
-        <!--<div formArrayName="university" *ngFor="let Uni_ID of university.controls; let i= index">
+        <!--<div formArrayName="SchoolId" *ngFor="let SchoolId of SchoolId.controls; let i= index">
             <div [formGroupName]="i">
                 <div class=" input-group mb-3 mt-2 ">
                     <div class="form-floating flex-grow-1">
-                        <input id="Uni_ID" class="form-control " type="text" formControlName="university" placeholder="Uni_ID">
+                        <input id="SchoolId" class="form-control " type="text" formControlName="SchoolId" placeholder="SchoolId">
                         <label for="floatingInput">Student ID</label>
                     </div>
                 </div>
@@ -61,17 +61,17 @@
 
         </div>-->
         <div class="form-floating">
-            <!--<input type="phone" id="Phone" placeholder="Phone" class="form-control mb-1" formControlName="user_Phone">
-            <label for="floatingInput">Phone</label>-->
+            <input type="phone" id="Phone" placeholder="Phone" class="form-control mb-1" formControlName="PhoneNumber">
+            <label for="floatingInput">Phone</label>
         </div>
         <div class="form-floating">
-            <input type="email" id="email" placeholder="Email" class="form-control mb-1" formControlName="email">
+            <input type="email" id="email" placeholder="Email" class="form-control mb-1" formControlName="Email">
             <label for="floatingInput">Email</label>
         </div>
 
         <div class="form-floating">
             <input type="password" id="password" placeholder="Password" class="form-control mb-1"
-                formControlName="password">
+                formControlName="Password">
             <label for="floatingInput">Password</label>
         </div>
 
