@@ -2,7 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:mobile/database/dog.dart';
+import 'package:mobile/database/flight_route.dart';
 
 class DatabaseManager {
   DatabaseManager._privateConstructor();
@@ -13,7 +13,7 @@ class DatabaseManager {
 
   Future<Database> _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'dogs.db');
+    String path = join(documentsDirectory.path, 'mobileapp.db');
     return await openDatabase(
       path,
       version: 1,
@@ -22,24 +22,32 @@ class DatabaseManager {
   }
 
   Future _onCreate(Database db, int version) async {
-    await db.execute('''CREATE TABLE dogs(
+    await db.execute('''CREATE TABLE route(
         id INTEGER PRIMARY KEY, 
-        name TEXT,
-        age INTEGER
-      )
+        departure TEXT,
+        arrival TEXT,
+        scale INTEGER)
     ''');
   }
 
-  Future<List<Dog>> getDogs() async {
+  Future<List<FlightRoute>> getRoutes() async {
     Database db = await instance.database;
-    var dogs = await db.query('dogs', orderBy: 'name');
-    List<Dog> dogList =
-        dogs.isEmpty ? [] : dogs.map((c) => Dog.fromMap(c)).toList();
-    return dogList;
+    var routes = await db.query('route', orderBy: 'id');
+    List<FlightRoute> routeList = routes.isEmpty
+        ? []
+        : routes.map((c) => FlightRoute.fromMap(c)).toList();
+    return routeList;
   }
 
-  Future<int> addDog(Dog dog) async {
+  Future<int> addRoute(FlightRoute route) async {
     Database db = await instance.database;
-    return await db.insert('dogs', dog.toMap());
+    return await db.insert('route', route.toMap());
+  }
+
+  Future<bool> isTableEmpty() async {
+    Database db = await instance.database;
+    int? count =
+        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM route'));
+    return count == 0;
   }
 }

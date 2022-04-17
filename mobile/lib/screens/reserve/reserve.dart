@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/database/database_manager.dart';
 import 'package:mobile/database/flight_route.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 
-class Flights extends StatefulWidget {
+class Reserve extends StatefulWidget {
   final String accessToken;
 
-  const Flights({Key? key, required this.accessToken}) : super(key: key);
+  const Reserve({Key? key, required this.accessToken}) : super(key: key);
 
   @override
-  _FlightsState createState() => _FlightsState();
+  _ReserveState createState() => _ReserveState();
 }
 
-class _FlightsState extends State<Flights> {
+class _ReserveState extends State<Reserve> {
   final textController = TextEditingController();
 
   @override
@@ -41,51 +40,25 @@ class _FlightsState extends State<Flights> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                         const SizedBox(height: 50),
-                        const Text('Flights',
+                        const Text('Reservation',
                             style: TextStyle(
                                 color: Color.fromARGB(255, 0, 115, 161),
                                 fontSize: 40,
                                 fontWeight: FontWeight.bold)),
                         const SizedBox(height: 50),
-                        FutureBuilder<List<FlightRoute>>(
-                            future: DatabaseManager.instance.getRoutes(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<FlightRoute>> snapshot) {
-                              if (!snapshot.hasData) {
-                                return const Center(child: Text("Loading..."));
-                              }
-                              return DropdownSearch<String>(
-                                mode: Mode.DIALOG,
-                                showSelectedItems: true,
-                                showSearchBox: true,
-                                items: snapshot.data!
-                                    .map((e) => e.toMap()['departure'])
-                                    .toList()
-                                    .cast<String>(),
-                                onChanged: print,
-                                selectedItem: "costarica",
-                                dropdownSearchDecoration: const InputDecoration(
-                                    labelText: "Origin Airport",
-                                    hintText: "Flight"),
-                              );
-                            }),
+                        TextFormField(
+                            keyboardType: TextInputType.text,
+                            decoration: const InputDecoration(
+                                labelText: "Origin Airport",
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.flight))),
                         const SizedBox(height: 25),
-                        DropdownSearch<String>(
-                          mode: Mode.DIALOG,
-                          showSelectedItems: true,
-                          showSearchBox: true,
-                          items: const [
-                            "Costa Rica",
-                            "Italia",
-                            "Tunisia",
-                            'Canada'
-                          ],
-                          onChanged: print,
-                          selectedItem: "Canada",
-                          dropdownSearchDecoration: const InputDecoration(
-                              labelText: "Destination Airport",
-                              hintText: "Flight"),
-                        ),
+                        TextFormField(
+                            keyboardType: TextInputType.text,
+                            decoration: const InputDecoration(
+                                labelText: "Destination Airport",
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.flight))),
                         const SizedBox(height: 50),
                         Container(
                             height: 60,
