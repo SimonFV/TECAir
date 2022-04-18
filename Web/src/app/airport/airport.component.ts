@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
+import { UserService } from '../services/userManagment/user.service';
 
 @Component({
   selector: 'app-airport',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AirportComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private usrManagment: UserService) { }
+ 
+  private token:any;
+  private role: string | undefined;
   ngOnInit(): void {
+    /*this.usrManagment.trigger.subscribe(data=>{
+      console.log(data.tok);
+      console.log(data.role);
+      
+      this.token=data.tok;
+      this.role=data.role;
+    })*/
   }
 
 }

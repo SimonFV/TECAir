@@ -7,26 +7,26 @@
     <form [formGroup]="form" (submit)="getData()" style="max-width: 300px;margin: auto;">
         <h5 class="mt-3">I am a:</h5>
 
-        <!--<div class="form-check mt-3 ">
-            <input class="form-check-input" type="radio" formControlName="user_Role"(change)="deleteStudent()" value="User"
+        <div class="form-check mt-3 " >
+            <input ng-model="stu" class="form-check-input" type="radio" formControlName="Role"(change)="deleteStudent()" value="Client"
                 id="flexRadioDefault1">
-            <label class="form-check-label" for="flexRadioDefault1"> User </label>
+            <label class="form-check-label" for="flexRadioDefault1"> Client </label>
         </div>
 
         <div class="form-check mt-1">
-            <input class="form-check-input" type="radio" formControlName="user_Role" (change)="deleteStudent()"value="Admin"
+            <input class="form-check-input"  type="radio" formControlName="Role" (change)="deleteStudent()"value="Employee"
                 id="flexRadioDefault1">
-            <label class="form-check-label" for="flexRadioDefault1"> Airport Admin </label>
+            <label class="form-check-label" for="flexRadioDefault1"> Employee </label>
         </div>
 
         <div class="form-check mt-1">
-           <input class="form-check-input" type="radio" formControlName="user_Role"(change)="addStudent()" value="Student"
+           <input class="form-check-input" type="radio" formControlName="Role"(change)="addStudent()" value="Student"
                 id="flexRadioDefault1">
             <label class="form-check-label" for="flexRadioDefault1"> Student </label>
-        </div>-->
+        </div>
 
         <div class="form-floating">
-            <input type="Name" id="Name" class="form-control mb-1" placeholder="Name" formControlName="UserName">
+            <input type="Name" id="Name" class="form-control mb-1" placeholder="Name" formControlName="FirstName">
             <label for="floatingInput">Name</label>
         </div>
 
@@ -44,10 +44,15 @@
             <input type="ID" id="ID" placeholder="ID" class="form-control mb-1" formControlName="Ssn">
             <label for="floatingInput">ID</label>
         </div>
-        <div class="form-floating">
-            <input type="ID" id="university" placeholder="university" class="form-control mb-1" formControlName="University">
+        <div class="form-floating" *ngIf="student">
+            <input  type="ID" id="university"  placeholder="university" class="form-control mb-1" formControlName="University">
             <label for="floatingInput">University</label>
         </div>
+        <div class="form-floating" *ngIf="student">
+            <input type="ID" id="SchoolId" placeholder="SchoolId" class="form-control mb-1" formControlName="SchoolId">
+            <label for="floatingInput">Student ID</label>
+        </div>
+
         <!--<div formArrayName="SchoolId" *ngFor="let SchoolId of SchoolId.controls; let i= index">
             <div [formGroupName]="i">
                 <div class=" input-group mb-3 mt-2 ">

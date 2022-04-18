@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { map, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserService } from '../services/userManagment/user.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,10 +15,13 @@ export class SignInComponent implements OnInit {
   
   constructor(private formBuilder: FormBuilder,
     private service: ApiService,
-    private router: Router) { 
+    private router: Router,
+    private usrManagment: UserService
+    ) { 
     
   }
   data:any=[];
+  public token: any;
   ngOnInit(): void {
     this.form= this.formBuilder.group({
       Email: ['',[]],
@@ -43,11 +47,20 @@ export class SignInComponent implements OnInit {
   }
   readResp(response:any){
     this.data=<JSON>response;
-    console.log(this.data.token);
-    console.log(this.data.success);
-    console.log(this.data.errors);
-    if(this.data.success=="false"){
-      this.router.navigate(["/signIn"]);
+    this.token=this.data.token
+    
+    if(this.data.role=="Employee"){
+      this.usrManagment.trigger.emit({
+        tok:this.data.token,
+        role: this.data.role
+      });
+      this.router.navigate(["/airport"]);
+    }else{
+      this.usrManagment.trigger.emit({
+        tok:this.data.token,
+        role: this.data.role
+      });
+      this.router.navigate(["/reservations"]);
     }
   }
 
