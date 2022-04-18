@@ -23,13 +23,17 @@ namespace api.Controller
     public class AuthenticationController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+
+        private readonly RoleManager<Role> _roleManager;
         private readonly JwtConfig _jwtConfig;
 
         public AuthenticationController(
             UserManager<User> userManager,
+            RoleManager<Role> roleManager,
             IOptionsMonitor<JwtConfig> optionsMonitor)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _jwtConfig = optionsMonitor.CurrentValue;
         }
 
@@ -56,7 +60,7 @@ namespace api.Controller
                 var newUser = new User()
                 {
                     Email = user.Email,
-                    UserName = user.FirstName + user.Ssn,
+                    UserName = user.FirstName + user.Email.Split('@')[0] + user.Email.Split('.')[0],
                     FirstName = user.FirstName,
                     LastName1 = user.LastName1,
                     LastName2 = user.LastName2,
@@ -69,10 +73,12 @@ namespace api.Controller
                 if (isCreated.Succeeded)
                 {
                     var jwtToken = GenerateJwtToken(newUser);
+                    _userManager.AddToRoleAsync(newUser, user.Role).Wait();
 
                     return Ok(new RegistrationResponse()
                     {
                         Success = true,
+                        Role = user.Role,
                         Token = jwtToken
                     });
                 }
@@ -108,7 +114,7 @@ namespace api.Controller
                     return BadRequest(new RegistrationResponse()
                     {
                         Errors = new List<string>() {
-                                "Invalid login request"
+                                "Email does not exist."
                             },
                         Success = false
                     });
@@ -121,18 +127,20 @@ namespace api.Controller
                     return BadRequest(new RegistrationResponse()
                     {
                         Errors = new List<string>() {
-                                "Invalid login request"
+                                "Incorrect password."
                             },
                         Success = false
                     });
                 }
 
                 var jwtToken = GenerateJwtToken(existingUser);
+                var roles = await _userManager.GetRolesAsync(existingUser);
 
                 return Ok(new RegistrationResponse()
                 {
                     Success = true,
-                    Token = jwtToken
+                    Token = jwtToken,
+                    Role = roles[0]
                 });
             }
 

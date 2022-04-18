@@ -77,7 +77,10 @@ namespace api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app,
+                                IWebHostEnvironment env,
+                                UserManager<User> userManager,
+                                RoleManager<Role> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -93,6 +96,8 @@ namespace api
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            SeedData.Seed(userManager, roleManager);
 
             app.UseCors("MyCors");
 

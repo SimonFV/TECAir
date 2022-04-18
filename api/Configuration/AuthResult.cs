@@ -6,6 +6,7 @@ namespace api.Configuration
     {
         public string Token { get; set; }
         public bool Success { get; set; }
+        public string Role { get; set; }
         public List<string> Errors { get; set; }
     }
 }

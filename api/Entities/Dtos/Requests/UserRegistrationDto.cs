@@ -21,5 +21,7 @@ namespace api.Dtos.Requests
         public string PhoneNumber { get; set; }
         public string SchoolId { get; set; }
         public string University { get; set; }
+        [Required]
+        public string Role { get; set; }
     }
 }
