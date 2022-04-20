@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Container } from '@angular/compiler/src/i18n/i18n_ast';
+import { Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { UserService } from '../services/userManagment/user.service';
 
 @Component({
   selector: 'app-flights',
@@ -8,17 +10,35 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class FlightsComponent implements OnInit {
   public form!: FormGroup;
+  private usrToken: any;
+  private usrRole: any;
+  employee: number = 0;
 
-  constructor(private formBuilder: FormBuilder) { }
-
+  constructor(private formBuilder: FormBuilder,
+    private usrManagment: UserService) { 
+  }
+  
   ngOnInit(): void {
-    this.form=this.formBuilder.group({
-      from: ['',[]],
+    this.usrManagment.trigger.subscribe(data => {
+
+      this.usrInfo(data.tok, data.role);
+    });
+
+    this.employee = 3
+    this.form = this.formBuilder.group({
+      from: ['', []],
       to: ['', []]
     });
   }
-  getData(){
+
+  usrInfo(_token: string, _role: string) {
+
+    this.usrRole = _role;
+    this.usrToken = _token;
+
+  }
+  getData() {
     console.log(this.form.value);
-  }  
+  }
 
 }

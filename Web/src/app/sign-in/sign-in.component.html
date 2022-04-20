@@ -15,7 +15,7 @@
         <div class="mt-3" id="alertDiv"> </div>
         <div class="mt-3 d-grid gap-2 d-md-flex justify-content-center">
             <button class="btn btn-lg btn-outline-primary btn-block " routerLink="">Sign Up</button>
-            <button class="btn btn-lg btn-primary btn-block" >Sign In</button>
+            <button class="btn btn-lg btn-primary btn-block" [disabled]="form.invalid">Sign In</button>
 
         </div>
     </form>
