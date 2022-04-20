@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { UserService } from '../services/userManagment/user.service';
@@ -23,16 +23,16 @@ export class InitComponent implements OnInit {
   student:boolean=false;
   ngOnInit(): void {
     this.form= this.formBuilder.group({
-      Role: ['',[]],
-      FirstName: ['',[]],
-      LastName1: ['',[]],
-      LastName2: ['',[]],
-      Ssn: ['',[]],
+      Role: ['',[Validators.required]],
+      FirstName: ['',[Validators.required]],
+      LastName1: ['',[Validators.required]],
+      LastName2: ['',[Validators.required]],
+      Ssn: ['',[Validators.required]],
       University: ['',[]],
       SchoolId: ['',[]],
-      PhoneNumber: ['',[]],
-      Email: ['',[]],
-      Password: ['',[]]
+      PhoneNumber: ['',[Validators.required]],
+      Email: ['',[Validators.required, Validators.email]],
+      Password: ['',[Validators.required, Validators.minLength(6)]]
       
     });
   }
@@ -41,15 +41,23 @@ export class InitComponent implements OnInit {
     this.service.postRegister(this.form.value).subscribe(resp=>{
       console.log(resp.status);
       
-      if(resp.status!=200){
-        console.error("ERROR");
-        
-      }else{
-        this.readResp(resp.body);
-      }
+      this.readResp(resp.body);
       
+      
+    }, err=>{
+      for (let e of err.error.errors){
+        this.alert(e,'danger')
+        console.log(e);
+      }
     })
     console.log(this.form.value);
+  }
+  alert(message:string, type: string){
+    const alertPlaceholder = document.getElementById('alertDiv')!
+    var wrapper = document.createElement('div')
+    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
+      '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    alertPlaceholder.appendChild(wrapper)
   }
   readResp(response:any){
     this.data=<JSON>response;
