@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../services/userManagment/user.service';
 
 @Component({
   selector: 'app-nav-client',
@@ -11,5 +12,4 @@ export class NavClientComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

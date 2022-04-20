@@ -54,24 +54,21 @@ export class InitComponent implements OnInit {
   readResp(response:any){
     this.data=<JSON>response;
     this.token=this.data.token
-    
+    this.usrManagment.trigger.emit({
+      tok:this.data.token,
+      role:this.data
+    });
     if(this.data.role=="Employee"){
-      this.usrManagment.trigger.emit({
-        tok:this.data.token,
-        role:this.data
-      });
       this.router.navigate(["/airport"]);
     }else{
-      this.usrManagment.trigger.emit({
-        tok:this.data.token,
-        role: this.data.role
-      });
       this.router.navigate(["/reservations"]);
     }
+    
+    
   }
 
   get SchoolId(){
-    return this.form.get('SchoolId') //as FormArray;
+    return this.form.get('SchoolId') ;
   }
   get University(){
     return this.form.get('University') 

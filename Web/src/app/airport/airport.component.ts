@@ -13,13 +13,6 @@ export class AirportComponent implements OnInit {
   private token:any;
   private role: string | undefined;
   ngOnInit(): void {
-    /*this.usrManagment.trigger.subscribe(data=>{
-      console.log(data.tok);
-      console.log(data.role);
-      
-      this.token=data.tok;
-      this.role=data.role;
-    })*/
   }
 
 }
