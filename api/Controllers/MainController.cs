@@ -1,3 +1,5 @@
+/*
+
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using api.Data;
@@ -13,9 +15,9 @@ namespace api.Controller
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class MainController : ControllerBase
     {
-        private readonly ApiDbContext _context;
+        private readonly TecAirDBContext _context;
 
-        public MainController(ApiDbContext context)
+        public MainController(TecAirDBContext context)
         {
             _context = context;
         }
@@ -220,6 +222,8 @@ namespace api.Controller
             repository.UpdateDB();
             return NoContent();
         }
-        */
+        
     }
 }
+
+*/

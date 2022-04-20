@@ -22,11 +22,26 @@ class DatabaseManager {
   }
 
   Future _onCreate(Database db, int version) async {
+    await db.execute('''CREATE TABLE flight(
+        id INTEGER PRIMARY KEY,
+        idRute INTEGER FOREIGN,
+        airplaneLicense TEXT,
+        gate TEXT,
+        schedule TEXT,
+        status TEXT,
+        deals deals,
+        FOREIGN (idRute) REFERENCES route(id),
+        FOREIGN (airplaneLicense) REFERENCES plane(airplaneLicense))
+    ''');
     await db.execute('''CREATE TABLE route(
         id INTEGER PRIMARY KEY, 
         departure TEXT,
         arrival TEXT,
-        scale INTEGER)
+        scale TEXT)
+    ''');
+    await db.execute('''CREATE TABLE airplane(
+        airplaneLicense TEXT PRIMARY KEY, 
+        capacity INTEGER)
     ''');
   }
 

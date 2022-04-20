@@ -28,7 +28,8 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApiDbContext>(options => options.UseSqlite(
+            services.AddMvc();
+            services.AddDbContext<TecAirDBContext>(options => options.UseNpgsql(
                 Configuration.GetConnectionString("DefaultConnection")
             ));
 
@@ -73,7 +74,7 @@ namespace api
             });
 
             services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<ApiDbContext>();
+                    .AddEntityFrameworkStores<TecAirDBContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

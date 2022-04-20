@@ -13,13 +13,13 @@ void main() async {
 
   if (await DatabaseManager.instance.isTableEmpty()) {
     await DatabaseManager.instance.addRoute(
-        FlightRoute(id: 1, departure: "Costa Rica", arrival: "USA", scale: 65));
+        FlightRoute(id: 1, departure: "Costa Rica", arrival: "USA", scale: []));
     await DatabaseManager.instance.addRoute(
-        FlightRoute(id: 2, departure: "USA", arrival: "Costa Rica", scale: 65));
+        FlightRoute(id: 2, departure: "USA", arrival: "Costa Rica", scale: []));
     await DatabaseManager.instance.addRoute(FlightRoute(
-        id: 3, departure: "Mexico", arrival: "Costa Rica", scale: 43));
+        id: 3, departure: "Mexico", arrival: "Costa Rica", scale: []));
     await DatabaseManager.instance.addRoute(FlightRoute(
-        id: 4, departure: "Costa Rica", arrival: "Mexico", scale: 43));
+        id: 4, departure: "Costa Rica", arrival: "Mexico", scale: []));
   }
 
   //Run the interface

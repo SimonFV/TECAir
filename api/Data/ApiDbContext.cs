@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+/*using Microsoft.EntityFrameworkCore;
 using api.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -15,3 +15,4 @@ namespace api.Data
         }
     }
 }
+*/

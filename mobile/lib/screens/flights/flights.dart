@@ -3,11 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:mobile/database/database_manager.dart';
 import 'package:mobile/database/flight_route.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:mobile/database/user.dart';
 
 class Flights extends StatefulWidget {
-  final String accessToken;
+  final User activeUser;
 
-  const Flights({Key? key, required this.accessToken}) : super(key: key);
+  const Flights({Key? key, required this.activeUser}) : super(key: key);
 
   @override
   _FlightsState createState() => _FlightsState();
@@ -19,13 +20,18 @@ class _FlightsState extends State<Flights> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+            backgroundColor: const Color.fromARGB(193, 38, 240, 172),
+            title: Text(widget.activeUser.email == ""
+                ? "Offline Mode"
+                : widget.activeUser.email)),
         body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light,
             child: Stack(children: <Widget>[
               Container(
                   height: double.infinity,
                   width: double.infinity,
-                  padding: const EdgeInsets.all(30),
+                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
                   decoration: const BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
@@ -46,7 +52,7 @@ class _FlightsState extends State<Flights> {
                                 color: Color.fromARGB(255, 0, 115, 161),
                                 fontSize: 40,
                                 fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 50),
+                        const SizedBox(height: 30),
                         FutureBuilder<List<FlightRoute>>(
                             future: DatabaseManager.instance.getRoutes(),
                             builder: (BuildContext context,
@@ -54,39 +60,40 @@ class _FlightsState extends State<Flights> {
                               if (!snapshot.hasData) {
                                 return const Center(child: Text("Loading..."));
                               }
-                              return DropdownSearch<String>(
-                                mode: Mode.DIALOG,
-                                showSelectedItems: true,
-                                showSearchBox: true,
-                                items: snapshot.data!
-                                    .map((e) => e.toMap()['departure'])
-                                    .toList()
-                                    .cast<String>(),
-                                onChanged: print,
-                                selectedItem: "costarica",
-                                dropdownSearchDecoration: const InputDecoration(
-                                    labelText: "Origin Airport",
-                                    hintText: "Flight"),
-                              );
+                              return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    DropdownSearch<String>(
+                                      mode: Mode.DIALOG,
+                                      showSelectedItems: true,
+                                      showSearchBox: true,
+                                      items: snapshot.data!
+                                          .map((e) => e.toMap()['departure'])
+                                          .toList()
+                                          .cast<String>(),
+                                      onChanged: print,
+                                      selectedItem: "Costa Rica",
+                                      dropdownSearchDecoration:
+                                          const InputDecoration(
+                                              labelText: "Origin Airport"),
+                                    ),
+                                    DropdownSearch<String>(
+                                      mode: Mode.DIALOG,
+                                      showSelectedItems: true,
+                                      showSearchBox: true,
+                                      items: snapshot.data!
+                                          .map((e) => e.toMap()['arrival'])
+                                          .toList()
+                                          .cast<String>(),
+                                      onChanged: print,
+                                      selectedItem: "Mexico",
+                                      dropdownSearchDecoration:
+                                          const InputDecoration(
+                                              labelText: "Destination Airport"),
+                                    )
+                                  ]);
                             }),
-                        const SizedBox(height: 25),
-                        DropdownSearch<String>(
-                          mode: Mode.DIALOG,
-                          showSelectedItems: true,
-                          showSearchBox: true,
-                          items: const [
-                            "Costa Rica",
-                            "Italia",
-                            "Tunisia",
-                            'Canada'
-                          ],
-                          onChanged: print,
-                          selectedItem: "Canada",
-                          dropdownSearchDecoration: const InputDecoration(
-                              labelText: "Destination Airport",
-                              hintText: "Flight"),
-                        ),
-                        const SizedBox(height: 50),
+                        const SizedBox(height: 40),
                         Container(
                             height: 60,
                             width: double.infinity,
@@ -102,17 +109,7 @@ class _FlightsState extends State<Flights> {
                                     style: TextStyle(
                                         fontSize: 25,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold)))),
-                        const SizedBox(height: 50),
-                        const Divider(
-                          height: 30,
-                          color: Colors.grey,
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Sign out'))
+                                        fontWeight: FontWeight.bold))))
                       ])))
             ])));
   }

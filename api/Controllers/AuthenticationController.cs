@@ -64,10 +64,10 @@ namespace api.Controller
                     FirstName = user.FirstName,
                     LastName1 = user.LastName1,
                     LastName2 = user.LastName2,
-                    Ssn = user.Ssn,
+                    Ssn = int.Parse(user.Ssn),
                     PhoneNumber = user.PhoneNumber,
                     University = user.University,
-                    SchoolId = user.SchoolId
+                    Schoolid = int.Parse(user.SchoolId)
                 };
                 var isCreated = await _userManager.CreateAsync(newUser, user.Password);
                 if (isCreated.Succeeded)

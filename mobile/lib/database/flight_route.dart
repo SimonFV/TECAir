@@ -2,7 +2,7 @@ class FlightRoute {
   final int? id;
   final String departure;
   final String arrival;
-  final int scale;
+  final List<String> scale;
 
   FlightRoute({
     required this.id,
@@ -24,12 +24,5 @@ class FlightRoute {
       'arrival': arrival,
       'scale': scale,
     };
-  }
-
-  // Implement toString to make it easier to see information about
-  // each dog when using the print statement.
-  @override
-  String toString() {
-    return 'Route{id: $id, departure: $departure, arrival: $scale, age: $scale}';
   }
 }

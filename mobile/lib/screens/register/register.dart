@@ -63,7 +63,7 @@ class _RegisterState extends State<Register> {
     }
     try {
       final response = await post(
-          Uri.parse("http://192.168.1.7:5001/Authentication/register"),
+          Uri.parse("http://192.168.1.4:5001/Authentication/register"),
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
@@ -77,7 +77,8 @@ class _RegisterState extends State<Register> {
             "ssn": userSsn.text,
             "phoneNumber": userPhone.text,
             "schoolId": _isStudent ? userSchoolId.text : null,
-            "university": _isStudent ? userCollege.text : null
+            "university": _isStudent ? userCollege.text : null,
+            "role": _isStudent ? "Student" : "Client",
           }));
       final jsonBody = jsonDecode(response.body);
       if (jsonBody['success'] == true) {
