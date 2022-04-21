@@ -2,8 +2,6 @@
 using api.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using api.Configuration;
 using Microsoft.Extensions.Configuration;
 
 #nullable disable
@@ -12,11 +10,6 @@ namespace api.Data
 {
     public partial class TecAirDBContext : IdentityDbContext<User, Role, int>
     {
-        private readonly IConfiguration _configuration;
-        public TecAirDBContext(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
 
         public TecAirDBContext(DbContextOptions<TecAirDBContext> options)
             : base(options)
@@ -30,13 +23,6 @@ namespace api.Data
         public virtual DbSet<Rute> Rutes { get; set; }
         public virtual DbSet<Schoolid> Schoolids { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
