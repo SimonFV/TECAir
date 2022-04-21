@@ -9,18 +9,20 @@ namespace DAL
 {
     class DAL
     {
+        /*
         static void Main(string[] args)
         {
             TestConnection();
             Console.ReadKey();
         }
+        */
 
         private static void Get_planes()
         {
             using (NpgsqlConnection con = GetConnection())
             {
                 string query = @"SELECT airplane_license,model FROM plane WHERE plane.status = 'Free'";
-                NpgsqlCommand cmd = new NpgsqlCommand(query,con);
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 NpgsqlDataReader n = cmd.ExecuteReader();
 
@@ -35,20 +37,20 @@ namespace DAL
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"INSERT INTO plane(airplane_license, capacity, model) VALUES ("+ airplane_license + ", "+ capacity + ", "+ model + ");";
+                string query = @"INSERT INTO plane(airplane_license, capacity, model) VALUES (" + airplane_license + ", " + capacity + ", " + model + ");";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
-                
+
                 try
                 {
                     int n = cmd.ExecuteNonQuery();
-                    Console.Write("Airplane created"); 
+                    Console.Write("Airplane created");
                     con.Close();
                     return true;
                 }
                 catch
                 {
-                    Console.Write("Error: Airplane License is in use"); 
+                    Console.Write("Error: Airplane License is in use");
                     con.Close();
                     return false;
                 }
@@ -75,7 +77,7 @@ namespace DAL
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"SELECT flight.id, rute.departure, rute.scale, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND rute.departure = "+ departure + " AND rute.arrival = "+ arrival;
+                string query = @"SELECT flight.id, rute.departure, rute.scale, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND rute.departure = " + departure + " AND rute.arrival = " + arrival;
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 NpgsqlDataReader n = cmd.ExecuteReader();
@@ -143,11 +145,11 @@ namespace DAL
             }
         }
 
-        private static Boolean Insert_rute(int id,string departure, string scale, string arrival)
+        private static Boolean Insert_rute(int id, string departure, string scale, string arrival)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"Insert into rute (id, departure, scale, arrival) values("+ id +", "+ departure + ", "+ scale + ", "+ arrival + "); ";
+                string query = @"Insert into rute (id, departure, scale, arrival) values(" + id + ", " + departure + ", " + scale + ", " + arrival + "); ";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
 
@@ -167,17 +169,17 @@ namespace DAL
             }
         }
 
-        
-        private static void TestConnection() 
+
+        private static void TestConnection()
         {
-            using (NpgsqlConnection con = GetConnection()) 
+            using (NpgsqlConnection con = GetConnection())
             {
                 con.Open();
                 if (con.State == System.Data.ConnectionState.Open)
                 {
                     Console.WriteLine("Connected");
                 }
-                else 
+                else
                 {
                     Console.WriteLine("Error in the connection");
                 }
@@ -185,7 +187,7 @@ namespace DAL
             }
         }
 
-        private static NpgsqlConnection GetConnection() 
+        private static NpgsqlConnection GetConnection()
         {
             // Enter password
             return new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=postgres;Password= ;Database=tecair;");

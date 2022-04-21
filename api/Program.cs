@@ -15,7 +15,6 @@ namespace api
     {
         public static void Main(string[] args)
         {
-            //TestConnection();
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -25,21 +24,5 @@ namespace api
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-
-        private static void TestConnection()
-        {
-            using (NpgsqlConnection con = GetConnection())
-            {
-                con.Open();
-                if (con.State == ConnectionState.Open)
-                {
-                    Console.WriteLine("Connected to postgre DB!");
-                }
-            }
-        }
-        private static NpgsqlConnection GetConnection()
-        {
-            return new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=postgres;Password=Simon-12345;Database=testDB;");
-        }
     }
 }

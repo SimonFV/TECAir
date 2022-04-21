@@ -69,18 +69,25 @@ namespace api.Controller
                     Ssn = int.Parse(user.Ssn),
                     PhoneNumber = user.PhoneNumber,
                     University = user.University,
-                    Schoolid = int.Parse(user.SchoolId)
+                    Schoolid = user.SchoolId == null ? null : int.Parse(user.SchoolId)
                 };
 
-                var school = new Schoolid()
+                if (user.SchoolId != null)
                 {
-                    Number = int.Parse(user.SchoolId),
-                    Mile = 0
-                };
-                await _context.Schoolids.AddAsync(school);
-                await _context.SaveChangesAsync();
+                    var school = new Schoolid()
+                    {
+                        Number = int.Parse(user.SchoolId),
+                        Mile = 0
+                    };
+                    await _context.Schoolids.AddAsync(school);
+                    await _context.SaveChangesAsync();
 
-                newUser.School = school;
+                    newUser.School = school;
+                }
+                else
+                {
+                    newUser.School = null;
+                }
 
                 var isCreated = await _userManager.CreateAsync(newUser, user.Password);
                 if (isCreated.Succeeded)
