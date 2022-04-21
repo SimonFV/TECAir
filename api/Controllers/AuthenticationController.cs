@@ -22,16 +22,18 @@ namespace api.Controller
     [Route("[controller]")]
     public class AuthenticationController : ControllerBase
     {
+        private readonly TecAirDBContext _context;
         private readonly UserManager<User> _userManager;
-
         private readonly RoleManager<Role> _roleManager;
         private readonly JwtConfig _jwtConfig;
 
         public AuthenticationController(
+            TecAirDBContext context,
             UserManager<User> userManager,
             RoleManager<Role> roleManager,
             IOptionsMonitor<JwtConfig> optionsMonitor)
         {
+            _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtConfig = optionsMonitor.CurrentValue;
@@ -69,6 +71,17 @@ namespace api.Controller
                     University = user.University,
                     Schoolid = int.Parse(user.SchoolId)
                 };
+
+                var school = new Schoolid()
+                {
+                    Number = int.Parse(user.SchoolId),
+                    Mile = 0
+                };
+                await _context.Schoolids.AddAsync(school);
+                await _context.SaveChangesAsync();
+
+                newUser.School = school;
+
                 var isCreated = await _userManager.CreateAsync(newUser, user.Password);
                 if (isCreated.Succeeded)
                 {
