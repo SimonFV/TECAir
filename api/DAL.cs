@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using api.Entities;
 using Npgsql;
 
-namespace DAL
+namespace api
 {
-    class DAL
+    public static class DAL
     {
         /*
         static void Main(string[] args)
@@ -73,7 +74,7 @@ namespace DAL
             }
         }
 
-        private static void Get_flight_by_rute(string departure, string arrival)
+        public static void Get_flight_by_rute(string departure, string arrival)
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -83,7 +84,9 @@ namespace DAL
                 NpgsqlDataReader n = cmd.ExecuteReader();
 
                 while (n.Read())
+                {
                     Console.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6} \n", n[0], n[1], n[2], n[3], n[4], n[5], n[6]);
+                }
 
                 con.Close();
             }
@@ -105,7 +108,7 @@ namespace DAL
             }
         }
 
-        private static Boolean Insert_flight(int id, string airplane_license, int id_rute, int gate, string schedule)
+        public static Boolean Insert_flight(int id, string airplane_license, int id_rute, int gate, string schedule)
         {
             using (NpgsqlConnection con = GetConnection())
             {

@@ -16,7 +16,7 @@ using System.Security.Claims;
 using System;
 using System.Linq;
 
-namespace api.Controller
+namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
