@@ -18,7 +18,7 @@ namespace api
         }
         */
 
-        private static void Get_planes()
+        public static void Get_planes()
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -34,11 +34,11 @@ namespace api
             }
         }
 
-        private static Boolean Insert_plane(string airplane_license, int capacity, string model)
+        public static Boolean Insert_plane(string airplane_license, int capacity, string model)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"INSERT INTO plane(airplane_license, capacity, model) VALUES (" + airplane_license + ", " + capacity + ", " + model + ");";
+                string query = @"INSERT INTO plane(airplane_license, capacity, model) VALUES ('" + airplane_license + "', " + capacity + ", '" + model + "');";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
 
@@ -58,7 +58,7 @@ namespace api
             }
         }
 
-        private static void Get_flight()
+        public static void Get_flight()
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -74,26 +74,40 @@ namespace api
             }
         }
 
-        public static void Get_flight_by_rute(string departure, string arrival)
+        public async static Task<List<FlightResponse>> Get_flight_by_rute(string departure, string arrival)
         {
+            List<FlightResponse> flights = new List<FlightResponse>();
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"SELECT flight.id, rute.departure, rute.scale, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND rute.departure = " + departure + " AND rute.arrival = " + arrival;
+                string query = @"SELECT flight.id, rute.departure, rute.scale, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
-                NpgsqlDataReader n = cmd.ExecuteReader();
+                NpgsqlDataReader n = await cmd.ExecuteReaderAsync();
 
                 while (n.Read())
                 {
                     Console.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6} \n", n[0], n[1], n[2], n[3], n[4], n[5], n[6]);
+                    var flight = new FlightResponse()
+                    {
+                        Id = (int)n[0],
+                        Departure = (string)n[1],
+                        Scale = (string)n[2],
+                        Arrival = (string)n[3],
+                        Model = (string)n[4],
+                        Schedule = (string)n[5],
+                        Deals = (n[6] as int?) ?? 0
+                    };
+                    flights.Add(flight);
                 }
 
                 con.Close();
             }
+            return flights;
         }
 
-        private static void Get_flight_by_deals()
+        public static void Get_flight_by_deals()
         {
+
             using (NpgsqlConnection con = GetConnection())
             {
                 string query = @"SELECT flight.id, rute.departure, rute.scale, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND flight.deals != 0";
@@ -102,8 +116,9 @@ namespace api
                 NpgsqlDataReader n = cmd.ExecuteReader();
 
                 while (n.Read())
+                {
                     Console.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6} \n", n[0], n[1], n[2], n[3], n[4], n[5], n[6]);
-
+                }
                 con.Close();
             }
         }
@@ -112,7 +127,7 @@ namespace api
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"insert into flight(id,airplane_license,id_rute,gate,schedule,seat_available) values(" + id + ", " + airplane_license + ", " + id_rute + ", " + gate + ", " + schedule + ", (select capacity from plane where airplane_license = " + airplane_license + ")); UPDATE plane SET status = 'Occupied' WHERE airplane_license = " + airplane_license + "; ";
+                string query = @"insert into flight(id,airplane_license,id_rute,gate,schedule) values(" + id + ", '" + airplane_license + "', " + id_rute + ", '" + gate + "', '" + schedule + "'); UPDATE plane SET status = 'Occupied' WHERE airplane_license = '" + airplane_license + "'; ";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
 
@@ -132,7 +147,7 @@ namespace api
             }
         }
 
-        private static void Get_rutes()
+        public static void Get_rutes()
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -148,11 +163,11 @@ namespace api
             }
         }
 
-        private static Boolean Insert_rute(int id, string departure, string scale, string arrival)
+        public static Boolean Insert_rute(int id, string departure, string scale, string arrival)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"Insert into rute (id, departure, scale, arrival) values(" + id + ", " + departure + ", " + scale + ", " + arrival + "); ";
+                string query = @"Insert into rute(id, departure, scale, arrival) values(" + id + ", '" + departure + "', '" + scale + "', '" + arrival + "');";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
 
@@ -163,7 +178,7 @@ namespace api
                     con.Close();
                     return true;
                 }
-                catch
+                catch (Exception err)
                 {
                     Console.Write("Error: Id Rute is in use");
                     con.Close();
@@ -193,7 +208,7 @@ namespace api
         private static NpgsqlConnection GetConnection()
         {
             // Enter password
-            return new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=postgres;Password= ;Database=tecair;");
+            return new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=postgres;Password=1234;Database=TecAirDB;");
         }
     }
 }

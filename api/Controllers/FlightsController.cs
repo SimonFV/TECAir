@@ -11,7 +11,7 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class FlightsController : ControllerBase
     {
         private readonly TecAirDBContext _context;
@@ -21,15 +21,19 @@ namespace api.Controllers
             _context = context;
         }
 
-        /*
-        [HttpGet]
+
+        [HttpPost]
         [Route("flightsByRoute")]
         public async Task<IActionResult> flightsByRoute(RouteDto route)
         {
-            var flights = DAL.Get_flight_by_rute(route.Departure, route.Arrival);
-            return Ok(flights);
+            if (ModelState.IsValid)
+            {
+                var flights = await DAL.Get_flight_by_rute(route.Departure, route.Arrival);
+                return Ok(flights);
+            }
+            return new JsonResult("Something went wrong") { StatusCode = 500 };
         }
-        */
+
 
 
         [HttpPost]
