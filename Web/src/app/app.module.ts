@@ -16,6 +16,7 @@ import { CheckInComponent } from './check-in/check-in.component';
 import { AssignBaggageComponent } from './assign-baggage/assign-baggage.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { SalesManagementComponent } from './sales-management/sales-management.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
     OpnFlightComponent,
     CloseFlightComponent,
     CheckInComponent,
-    AssignBaggageComponent
+    AssignBaggageComponent,
+    SalesManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -43,8 +45,9 @@ import { HttpClientModule } from '@angular/common/http';
       {path: 'airport', component: AirportComponent},
       {path: '', component: InitComponent},
       {path: 'reservations', component: ReservationsComponent},
-      {path: 'sigIn',component:SignInComponent},
+      {path: 'signIn',component:SignInComponent},
       {path: 'sales',component: SalesComponent},
+      {path: 'salesMng',component: SalesManagementComponent},
       {path: 'checkIn', component: CheckInComponent},
       {path: 'assignBaggage',component: AssignBaggageComponent},
       {path: 'opnFlight',component: OpnFlightComponent},

@@ -23,21 +23,27 @@ export class InitComponent implements OnInit {
   student:boolean=false;
   ngOnInit(): void {
     this.form= this.formBuilder.group({
-      Role: ['',[Validators.required]],
       FirstName: ['',[Validators.required]],
       LastName1: ['',[Validators.required]],
       LastName2: ['',[Validators.required]],
-      Ssn: ['',[Validators.required]],
-      University: ['',[]],
-      SchoolId: ['',[]],
-      PhoneNumber: ['',[Validators.required]],
       Email: ['',[Validators.required, Validators.email]],
-      Password: ['',[Validators.required, Validators.minLength(6)]]
+      Password: ['',[Validators.required, Validators.minLength(6)]],
+      Ssn: ['',[Validators.required]],
+      PhoneNumber: ['',[Validators.required]],
+      SchoolId: ['',[]],
+      University: ['',[]],
+      Role: ['',[Validators.required]]
       
     });
+    
   }
   getData(){
     
+    
+    if(this.form.value.Role!="Student"){
+      this.form.value.SchoolId=null;
+      this.form.value.University=null
+    }
     this.service.postRegister(this.form.value).subscribe(resp=>{
       console.log(resp.status);
       
@@ -80,6 +86,9 @@ export class InitComponent implements OnInit {
   }
   get University(){
     return this.form.get('University') 
+  }
+  get Role(){
+    return this.form.get('Role') 
   }
   addStudent(){
     this.student=true;

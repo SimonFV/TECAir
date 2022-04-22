@@ -12,19 +12,17 @@ export class FlightsComponent implements OnInit {
   public form!: FormGroup;
   private usrToken: any;
   private usrRole: any;
-  employee: number = 0;
-
+  show=false;
   constructor(private formBuilder: FormBuilder,
     private usrManagment: UserService) { 
   }
   
   ngOnInit(): void {
     this.usrManagment.trigger.subscribe(data => {
-
+      console.log("RESP");
+      
       this.usrInfo(data.tok, data.role);
     });
-
-    this.employee = 3
     this.form = this.formBuilder.group({
       from: ['', []],
       to: ['', []]
@@ -38,7 +36,11 @@ export class FlightsComponent implements OnInit {
 
   }
   getData() {
+    this.show=!this.show;
     console.log(this.form.value);
+  }
+  backToSearch(){
+    this.show=!this.show;
   }
 
 }
