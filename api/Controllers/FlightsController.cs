@@ -35,7 +35,7 @@ namespace api.Controllers
         }
 
 
-
+        /*
         [HttpPost]
         [Route("add")]
         public async Task<IActionResult> AddFlight(FlightDto flight)
@@ -52,7 +52,7 @@ namespace api.Controllers
             return new JsonResult("Something went wrong") { StatusCode = 500 };
         }
 
-        /*
+        
        [HttpGet("items/{id}")]
        public async Task<IActionResult> GetItem(int id)
        {

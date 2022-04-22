@@ -178,7 +178,7 @@ namespace api
                     con.Close();
                     return true;
                 }
-                catch (Exception err)
+                catch
                 {
                     Console.Write("Error: Id Rute is in use");
                     con.Close();
