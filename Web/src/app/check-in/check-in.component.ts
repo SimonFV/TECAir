@@ -12,9 +12,9 @@ export class CheckInComponent implements OnInit {
 
   ngOnInit(): void {
     this.form=this.formBuilder.group({
-      user_ID: ['',[]],
-      flight_ID: ['', []],
-      seat: ['',[]]
+      Ssn: ['',[]],
+      IdFlight: ['', []],
+      Seat: ['',[]]
     })
   }
 

@@ -34,9 +34,9 @@ export class OpnFlightComponent implements OnInit {
     }
     console.log(this.Scale.value[0].Scale);
     
-    this.service.postAdd(this.form.value).subscribe(resp=>{
+    /*this.service.postAdd(this.form.value).subscribe(resp=>{
       console.log(resp);
-    })
+    })*/
     console.log(this.form.value);
     
   }

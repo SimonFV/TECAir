@@ -18,12 +18,12 @@ export class ApiService {
     let header = new HttpHeaders().set('Type-contet', 'aplication/json');
     return this.http.post<JSON[]>('http://localhost:5001/Authentication/login', user, { headers: header, observe:'response'});
   }
-  postRoute(route: any){
-    let header = new HttpHeaders().set('Type-contet', 'aplication/json');
-    return this.http.post<JSON[]>('http://localhost:5001/Flights/flightsByRoute', route, { headers: header, observe:'response'});
-  }
-  postAdd(flight: any){
+  postAdd(flight: JSON):Observable<any>{
     let header = new HttpHeaders().set('Type-contet', 'aplication/json');
     return this.http.post<JSON[]>('http://localhost:5001/Flights/add', flight, { headers: header, observe:'response'});
+  }
+  postRoute(route: JSON):Observable<any>{
+    let header = new HttpHeaders().set('Type-contet', 'aplication/json');
+    return this.http.post<JSON[]>('http://localhost:5001/Flights/flightsByRoute', route, { headers: header, observe:'response'});
   }
 }

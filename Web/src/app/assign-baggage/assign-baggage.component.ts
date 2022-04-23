@@ -12,9 +12,9 @@ export class AssignBaggageComponent implements OnInit {
 
   ngOnInit(): void {
     this.form=this.formBuilder.group({
-      user_ID: ['', []],
-      color: ['', []],
-      weight: ['', []]
+      Ssn: ['', []],
+      Color: ['', []],
+      Weight: ['', []]
     })
   }
   getData(){

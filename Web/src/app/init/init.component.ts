@@ -23,30 +23,6 @@ export class InitComponent implements OnInit {
   data:any=[];
   student:boolean=false;
   ngOnInit(): void {
-    this.service.postRoute({
-      "Departure": "SJO",
-      "Arrival": "CUN"
-    }).subscribe(resp=>{
-      console.log(resp);
-    });
-    this.service.postRoute({
-      "Departure": "CUN",
-      "Arrival": "SJO"
-    }).subscribe(resp=>{
-      console.log(resp);
-    });
-    this.service.postRoute({
-      "Departure": "SJO",
-      "Arrival": "NYC"
-    }).subscribe(resp=>{
-      console.log(resp);
-    });
-    this.service.postRoute({
-      "Departure": "NYC",
-      "Arrival": "SJO"
-    }).subscribe(resp=>{
-      console.log(resp);
-    });
     this.form= this.formBuilder.group({
       FirstName: ['',[Validators.required]],
       LastName1: ['',[Validators.required]],
