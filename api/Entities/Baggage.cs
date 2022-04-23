@@ -12,6 +12,8 @@ namespace api.Entities
         public int Weight { get; set; }
         public string Color { get; set; }
 
+        public string Status { get; set; }
+
         public virtual User SsnNavigation { get; set; }
     }
 }

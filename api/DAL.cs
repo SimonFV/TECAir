@@ -163,11 +163,11 @@ namespace api
             }
         }
 
-        public static Boolean Insert_rute(int id, string departure, string scale, string arrival)
+        public static Boolean Insert_rute(int id, string departure, string scale, string arrival, int miles)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"Insert into rute(id, departure, scale, arrival) values(" + id + ", '" + departure + "', '" + scale + "', '" + arrival + "');";
+                string query = @"Insert into rute(id, departure, scale, arrival, miles) values(" + id + ", '" + departure + "', '" + scale + "', '" + arrival + "', " + miles + ");";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
 

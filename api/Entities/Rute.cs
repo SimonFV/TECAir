@@ -17,6 +17,8 @@ namespace api.Entities
         public string Scale { get; set; }
         public string Arrival { get; set; }
 
+        public string Miles { get; set; }
+
         public virtual ICollection<Flight> Flights { get; set; }
     }
 }

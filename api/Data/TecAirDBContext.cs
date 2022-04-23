@@ -48,6 +48,8 @@ namespace api.Data
 
                 entity.Property(e => e.Weight).HasColumnName("weight");
 
+                entity.Property(e => e.Status).HasColumnName("status");
+
                 entity.HasOne(d => d.SsnNavigation)
                     .WithMany(p => p.Baggages)
                     .HasForeignKey(d => d.Ssn)
@@ -65,6 +67,8 @@ namespace api.Data
                 entity.Property(e => e.Ssn).HasColumnName("ssn");
 
                 entity.Property(e => e.IdFlight).HasColumnName("id_flight");
+
+                entity.Property(e => e.Status).HasColumnName("status");
 
                 entity.Property(e => e.Seat)
                     .IsRequired()
@@ -163,6 +167,10 @@ namespace api.Data
                     .HasColumnName("departure");
 
                 entity.Property(e => e.Scale).HasColumnName("scale");
+
+                entity.Property(e => e.Miles)
+                    .IsRequired()
+                    .HasColumnName("miles");
             });
 
             modelBuilder.Entity<Schoolid>(entity =>

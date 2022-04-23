@@ -11,6 +11,8 @@ namespace api.Entities
         public int IdFlight { get; set; }
         public string Seat { get; set; }
 
+        public string Status { get; set; }
+
         public virtual Flight IdFlightNavigation { get; set; }
         public virtual User SsnNavigation { get; set; }
     }
