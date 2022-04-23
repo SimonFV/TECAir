@@ -19,7 +19,6 @@ export class FlightsComponent implements OnInit {
   
   ngOnInit(): void {
     this.usrManagment.trigger.subscribe(data => {
-      console.log("RESP");
       
       this.usrInfo(data.tok, data.role);
     });
@@ -36,6 +35,7 @@ export class FlightsComponent implements OnInit {
 
   }
   getData() {
+    
     this.show=!this.show;
     console.log(this.form.value);
   }
