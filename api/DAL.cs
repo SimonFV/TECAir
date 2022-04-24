@@ -85,13 +85,12 @@ namespace api
                 try
                 {
                     int n = cmd.ExecuteNonQuery();
-                    Console.Write("Book created");
                     con.Close();
                     return true;
                 }
-                catch
+                catch (Exception err)
                 {
-                    Console.Write("Error");
+                    Console.Write(err);
                     con.Close();
                     return false;
                 }
@@ -158,7 +157,17 @@ namespace api
             List<FlightResponse> flights = new List<FlightResponse>();
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"SELECT flight." + "\"Id\"" + ", rute.departure, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
+                int id_route = -1;
+                string query = @"SELECT " + "\"Id\"" + " FROM rute WHERE rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
+                NpgsqlCommand cmd2 = new NpgsqlCommand(query, con);
+                con.Open();
+                NpgsqlDataReader m = await cmd2.ExecuteReaderAsync();
+                while (m.Read())
+                    id_route = (int)m[0];
+                con.Close();
+
+                query = @"SELECT flight." + "\"Id\"" + ", rute.departure, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.id_rute ="
+                     + id_route + " AND flight.airplane_license = plane.airplane_license AND flight.status != 'Close' AND rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
                 NpgsqlCommand cmd1 = new NpgsqlCommand(query, con);
                 con.Open();
                 NpgsqlDataReader n = await cmd1.ExecuteReaderAsync();
@@ -176,15 +185,6 @@ namespace api
                     };
                     flights.Add(flight);
                 }
-                con.Close();
-
-                int id_route = -1;
-                query = @"SELECT " + "\"Id\"" + " FROM rute WHERE rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
-                NpgsqlCommand cmd2 = new NpgsqlCommand(query, con);
-                con.Open();
-                NpgsqlDataReader m = await cmd2.ExecuteReaderAsync();
-                while (m.Read())
-                    id_route = (int)m[0];
                 con.Close();
 
                 query = @"SELECT place FROM scale WHERE scale.route_id = " + id_route + ";";
@@ -387,18 +387,18 @@ namespace api
             }
         }
 
-        public async static Task<List<int>> get_seats_flight(int id_flight)
+        public async static Task<List<SeatsResponse>> get_seats_flight(int id_flight)
         {
-            List<int> seats = new();
+            List<SeatsResponse> seats = new();
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"SELECT seat FROM book WHERE id_flight = " + id_flight + ");";
+                string query = @"SELECT ssn,seat,status FROM book WHERE id_flight = " + id_flight + ");";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 NpgsqlDataReader n = await cmd.ExecuteReaderAsync();
 
                 while (n.Read())
-                    seats.Add(Int32.Parse((string)n[0]));
+                    seats.Add(new SeatsResponse() { Ssn = (int)n[0], Seat = (string)n[1], Status = (string)n[2] });
 
                 con.Close();
             }

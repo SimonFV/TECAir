@@ -31,6 +31,8 @@ namespace api
             DAL.Insert_rute(7, "JFK", "HOU", "LAX", 556);
             DAL.Insert_rute(8, "JFK", null, "LAX", 556);*/
             //var result = DAL.Get_flight_by_rute("JFK", "SJO").Result;
+            //DAL.Insert_book(604440275, );
+
             CreateHostBuilder(args).Build().Run();
         }
 
