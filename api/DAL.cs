@@ -74,17 +74,26 @@ namespace api
             }
         }
 
-        public async static Task<Boolean> Insert_book(int ssn, int id_flight, string seat)
+        public async static Task<Boolean> Insert_book(string Email, int id_flight, string seat)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"INSERT INTO book(ssn, id_flight, seat) VALUES (" + ssn + ", " + id_flight + ", '" + seat + "');";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
-                con.Open();
-
                 try
                 {
-                    int n = await cmd.ExecuteNonQueryAsync();
+                    string query = @"SELECT " + "\"Id\"" + " FROM " + "\"AspNetUsers\"" + " WHERE " + "\"Email\"" + " = '" + Email + "';";
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                    con.Open();
+                    NpgsqlDataReader n = await cmd.ExecuteReaderAsync();
+                    int id = -1;
+                    while (n.Read())
+                        id = (int)n[0];
+                    con.Close();
+
+                    query = @"INSERT INTO book(id_user, id_flight, seat) VALUES (" + id + ", " + id_flight + ", '" + seat + "');";
+                    cmd = new NpgsqlCommand(query, con);
+                    con.Open();
+
+                    int m = await cmd.ExecuteNonQueryAsync();
                     con.Close();
                     return true;
                 }

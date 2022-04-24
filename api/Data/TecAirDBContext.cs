@@ -56,12 +56,12 @@ namespace api.Data
 
             modelBuilder.Entity<Book>(entity =>
             {
-                entity.HasKey(e => new { e.Ssn, e.IdFlight })
+                entity.HasKey(e => new { e.idUser, e.IdFlight })
                     .HasName("book_pkey");
 
                 entity.ToTable("book");
 
-                entity.Property(e => e.Ssn).HasColumnName("ssn");
+                entity.Property(e => e.idUser).HasColumnName("id_user");
 
                 entity.Property(e => e.IdFlight).HasColumnName("id_flight");
 
@@ -79,7 +79,7 @@ namespace api.Data
 
                 entity.HasOne(d => d.SsnNavigation)
                     .WithMany(p => p.Books)
-                    .HasForeignKey(d => d.Ssn)
+                    .HasForeignKey(d => d.idUser)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("book_ssn_fkey");
             });

@@ -51,7 +51,7 @@ namespace api.Controllers
             {
                 try
                 {
-                    var result = await DAL.Insert_book(book.Ssn, book.IdFlight, book.Seat);
+                    var result = await DAL.Insert_book(book.Email, book.IdFlight, book.Seat);
                     return Ok(result);
                 }
                 catch

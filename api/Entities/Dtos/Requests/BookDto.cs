@@ -9,7 +9,7 @@ namespace api.Entities
     public partial class BookDto
     {
         [Required]
-        public int Ssn { get; set; }
+        public string Email { get; set; }
         [Required]
         public int IdFlight { get; set; }
         [Required]
