@@ -19,7 +19,7 @@ namespace api.Configuration
                 {
                     Name = "Employee"
                 };
-                roleManager.CreateAsync(role);
+                var result = roleManager.CreateAsync(role).Result;
             }
             if (!roleManager.RoleExistsAsync("Client").Result)
             {
