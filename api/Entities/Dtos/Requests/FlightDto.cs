@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace api.Dtos.Requests
@@ -10,6 +11,6 @@ namespace api.Dtos.Requests
         public string Arrival { get; set; }
         [Required]
         public string PlaneId { get; set; }
-        public string Scale { get; set; }
+        public List<string> Scale { get; set; }
     }
 }

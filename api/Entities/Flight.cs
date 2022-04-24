@@ -16,7 +16,7 @@ namespace api.Entities
         public string AirplaneLicense { get; set; }
         public int IdRute { get; set; }
         public string Gate { get; set; }
-        public string Schedule { get; set; }
+        public DateTime Schedule { get; set; }
         public string Status { get; set; }
         public int? Deals { get; set; }
 

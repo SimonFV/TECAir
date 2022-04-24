@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api.Data;
@@ -9,9 +10,10 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(TecAirDBContext))]
-    partial class TecAirDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220423225506_Start")]
+    partial class Start
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,8 +205,8 @@ namespace api.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("id_rute");
 
-                    b.Property<DateTime>("Schedule")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset>("Schedule")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("schedule");
 
                     b.Property<string>("Status")
@@ -312,9 +314,9 @@ namespace api.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<int>("OrderLanding")
+                    b.Property<int>("Order")
                         .HasColumnType("integer")
-                        .HasColumnName("order_landing");
+                        .HasColumnName("order");
 
                     b.Property<string>("Place")
                         .IsRequired()

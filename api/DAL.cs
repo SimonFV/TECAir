@@ -79,28 +79,51 @@ namespace api
             List<FlightResponse> flights = new List<FlightResponse>();
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"SELECT flight.id, rute.departure, rute.scale, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                string query = @"SELECT flight.id, rute.departure, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
+                NpgsqlCommand cmd1 = new NpgsqlCommand(query, con);
                 con.Open();
-                NpgsqlDataReader n = await cmd.ExecuteReaderAsync();
+                NpgsqlDataReader n = await cmd1.ExecuteReaderAsync();
 
                 while (n.Read())
                 {
-                    Console.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6} \n", n[0], n[1], n[2], n[3], n[4], n[5], n[6]);
                     var flight = new FlightResponse()
                     {
                         Id = (int)n[0],
                         Departure = (string)n[1],
-                        Scale = (string)n[2],
-                        Arrival = (string)n[3],
-                        Model = (string)n[4],
-                        Schedule = (string)n[5],
-                        Deals = (n[6] as int?) ?? 0
+                        Arrival = (string)n[2],
+                        Model = (string)n[3],
+                        Schedule = (DateTime)n[4],
+                        Deals = (n[5] as int?) ?? 0
                     };
                     flights.Add(flight);
                 }
+                con.Close();
+
+                int id_route = -1;
+                query = @"SELECT id FROM rute WHERE rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
+                NpgsqlCommand cmd2 = new NpgsqlCommand(query, con);
+                con.Open();
+                NpgsqlDataReader m = await cmd2.ExecuteReaderAsync();
+                while (m.Read())
+                    id_route = (int)m[0];
+                con.Close();
+
+                query = @"SELECT place FROM scale WHERE scale.route_id = " + id_route + ";";
+                NpgsqlCommand cmd3 = new NpgsqlCommand(query, con);
+                con.Open();
+                NpgsqlDataReader o = await cmd3.ExecuteReaderAsync();
+                List<string> scales = new List<string>();
+
+                while (o.Read())
+                {
+                    scales.Add((string)o[0]);
+                }
+
+                for (int i = 0; i < flights.Count; i++)
+                    flights[i].Scale = scales;
 
                 con.Close();
+
             }
             return flights;
         }
@@ -123,7 +146,7 @@ namespace api
             }
         }
 
-        public static Boolean Insert_flight(int id, string airplane_license, int id_rute, int gate, string schedule)
+        public static Boolean Insert_flight(int id, string airplane_license, int id_rute, int gate, DateTimeOffset schedule)
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -163,11 +186,11 @@ namespace api
             }
         }
 
-        public static Boolean Insert_rute(int id, string departure, string scale, string arrival, int miles)
+        public static Boolean Insert_rute(int id, string departure, List<string> scale, string arrival, int miles)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"Insert into rute(id, departure, scale, arrival, miles) values(" + id + ", '" + departure + "', '" + scale + "', '" + arrival + "', " + miles + ");";
+                string query = @"Insert into rute(id, departure, arrival, miles) values(" + id + ", '" + departure + "', '" + arrival + "', " + miles + ");";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
 
@@ -176,7 +199,6 @@ namespace api
                     int n = cmd.ExecuteNonQuery();
                     Console.Write("Rute created");
                     con.Close();
-                    return true;
                 }
                 catch
                 {
@@ -184,6 +206,27 @@ namespace api
                     con.Close();
                     return false;
                 }
+
+                for (int i = 0; i < scale.Count; i++)
+                {
+                    query = @"Insert into scale(route_id, place, order_landing) values(" + id + ", '" + scale[i] + "', " + (i + 1) + ");";
+                    cmd = new NpgsqlCommand(query, con);
+                    con.Open();
+
+                    try
+                    {
+                        int n = cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
+                    catch (Exception err)
+                    {
+                        Console.Write(err);
+                        con.Close();
+                        return false;
+                    }
+                }
+                return true;
+
             }
         }
 

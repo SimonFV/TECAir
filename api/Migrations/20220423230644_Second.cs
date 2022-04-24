@@ -2,7 +2,7 @@
 
 namespace api.Migrations
 {
-    public partial class NullableAdded : Migration
+    public partial class Second : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

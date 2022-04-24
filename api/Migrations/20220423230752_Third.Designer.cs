@@ -10,8 +10,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(TecAirDBContext))]
-    [Migration("20220423200136_StatusMilesAdded")]
-    partial class StatusMilesAdded
+    [Migration("20220423230752_Third")]
+    partial class Third
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -205,9 +205,8 @@ namespace api.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("id_rute");
 
-                    b.Property<string>("Schedule")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<DateTimeOffset>("Schedule")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("schedule");
 
                     b.Property<string>("Status")
@@ -303,13 +302,39 @@ namespace api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("miles");
 
-                    b.Property<string>("Scale")
-                        .HasColumnType("text")
-                        .HasColumnName("scale");
-
                     b.HasKey("Id");
 
                     b.ToTable("rute");
+                });
+
+            modelBuilder.Entity("api.Entities.Scale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<int>("OrderLanding")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_landing");
+
+                    b.Property<string>("Place")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("place");
+
+                    b.Property<int>("RuteId")
+                        .HasColumnType("integer")
+                        .HasColumnName("route_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("RuteId");
+
+                    b.ToTable("scale");
                 });
 
             modelBuilder.Entity("api.Entities.Schoolid", b =>
@@ -524,6 +549,17 @@ namespace api.Migrations
                     b.Navigation("IdRuteNavigation");
                 });
 
+            modelBuilder.Entity("api.Entities.Scale", b =>
+                {
+                    b.HasOne("api.Entities.Rute", "Rute")
+                        .WithMany("Scales")
+                        .HasForeignKey("RuteId")
+                        .HasConstraintName("scale_id_rute_fkey")
+                        .IsRequired();
+
+                    b.Navigation("Rute");
+                });
+
             modelBuilder.Entity("api.Entities.User", b =>
                 {
                     b.HasOne("api.Entities.Schoolid", "School")
@@ -547,6 +583,8 @@ namespace api.Migrations
             modelBuilder.Entity("api.Entities.Rute", b =>
                 {
                     b.Navigation("Flights");
+
+                    b.Navigation("Scales");
                 });
 
             modelBuilder.Entity("api.Entities.Schoolid", b =>

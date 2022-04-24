@@ -22,6 +22,7 @@ namespace api.Data
         public virtual DbSet<Plane> Planes { get; set; }
         public virtual DbSet<Rute> Rutes { get; set; }
         public virtual DbSet<Schoolid> Schoolids { get; set; }
+        public virtual DbSet<Scale> Scales { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -166,11 +167,35 @@ namespace api.Data
                     .IsRequired()
                     .HasColumnName("departure");
 
-                entity.Property(e => e.Scale).HasColumnName("scale");
-
                 entity.Property(e => e.Miles)
                     .IsRequired()
                     .HasColumnName("miles");
+            });
+
+            modelBuilder.Entity<Scale>(entity =>
+            {
+                entity.ToTable("scale");
+
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Id).IsUnique();
+
+                entity.Property(e => e.RuteId)
+                    .IsRequired()
+                    .HasColumnName("route_id");
+
+                entity.Property(e => e.Place)
+                    .IsRequired()
+                    .HasColumnName("place");
+
+                entity.Property(e => e.OrderLanding)
+                    .IsRequired()
+                    .HasColumnName("order_landing");
+
+                entity.HasOne(d => d.Rute)
+                    .WithMany(p => p.Scales)
+                    .HasForeignKey(d => d.RuteId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("scale_id_rute_fkey");
             });
 
             modelBuilder.Entity<Schoolid>(entity =>

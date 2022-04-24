@@ -10,8 +10,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(TecAirDBContext))]
-    [Migration("20220421194820_NullableAdded")]
-    partial class NullableAdded
+    [Migration("20220424022203_Fourth")]
+    partial class Fourth
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -138,6 +138,10 @@ namespace api.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("ssn");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("text")
+                        .HasColumnName("status");
+
                     b.Property<int>("Weight")
                         .HasColumnType("integer")
                         .HasColumnName("weight");
@@ -164,6 +168,10 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("seat");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text")
+                        .HasColumnName("status");
 
                     b.HasKey("Ssn", "IdFlight")
                         .HasName("book_pkey");
@@ -197,9 +205,8 @@ namespace api.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("id_rute");
 
-                    b.Property<string>("Schedule")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<DateTime>("Schedule")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("schedule");
 
                     b.Property<string>("Status")
@@ -290,13 +297,44 @@ namespace api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("departure");
 
-                    b.Property<string>("Scale")
+                    b.Property<string>("Miles")
+                        .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("scale");
+                        .HasColumnName("miles");
 
                     b.HasKey("Id");
 
                     b.ToTable("rute");
+                });
+
+            modelBuilder.Entity("api.Entities.Scale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<int>("OrderLanding")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_landing");
+
+                    b.Property<string>("Place")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("place");
+
+                    b.Property<int>("RuteId")
+                        .HasColumnType("integer")
+                        .HasColumnName("route_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("RuteId");
+
+                    b.ToTable("scale");
                 });
 
             modelBuilder.Entity("api.Entities.Schoolid", b =>
@@ -511,6 +549,17 @@ namespace api.Migrations
                     b.Navigation("IdRuteNavigation");
                 });
 
+            modelBuilder.Entity("api.Entities.Scale", b =>
+                {
+                    b.HasOne("api.Entities.Rute", "Rute")
+                        .WithMany("Scales")
+                        .HasForeignKey("RuteId")
+                        .HasConstraintName("scale_id_rute_fkey")
+                        .IsRequired();
+
+                    b.Navigation("Rute");
+                });
+
             modelBuilder.Entity("api.Entities.User", b =>
                 {
                     b.HasOne("api.Entities.Schoolid", "School")
@@ -534,6 +583,8 @@ namespace api.Migrations
             modelBuilder.Entity("api.Entities.Rute", b =>
                 {
                     b.Navigation("Flights");
+
+                    b.Navigation("Scales");
                 });
 
             modelBuilder.Entity("api.Entities.Schoolid", b =>
