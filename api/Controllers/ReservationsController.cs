@@ -52,7 +52,11 @@ namespace api.Controllers
                 try
                 {
                     var result = await DAL.Insert_book(book.Email, book.IdFlight, book.Seat);
-                    return Ok(result);
+                    if (result)
+                    {
+                        return Ok();
+                    }
+                    return new JsonResult("Problem while adding the book.") { StatusCode = 500 };
                 }
                 catch
                 {
