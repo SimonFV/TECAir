@@ -16,5 +16,8 @@ namespace api.Dtos.Requests
         public string Gate { get; set; }
         [Required]
         public DateTime Schedule { get; set; }
+
+        [Required]
+        public int Deals { get; set; }
     }
 }

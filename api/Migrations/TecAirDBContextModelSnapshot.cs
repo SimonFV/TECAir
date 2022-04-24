@@ -133,9 +133,9 @@ namespace api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("color");
 
-                    b.Property<int>("Ssn")
+                    b.Property<int>("IdUser")
                         .HasColumnType("integer")
-                        .HasColumnName("ssn");
+                        .HasColumnName("id_user");
 
                     b.Property<string>("Status")
                         .HasColumnType("text")
@@ -150,20 +150,25 @@ namespace api.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.HasIndex("Ssn");
+                    b.HasIndex("IdUser");
 
                     b.ToTable("baggage");
                 });
 
             modelBuilder.Entity("api.Entities.Book", b =>
                 {
-                    b.Property<int>("idUser")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id_user");
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<int>("IdFlight")
                         .HasColumnType("integer")
                         .HasColumnName("id_flight");
+
+                    b.Property<int>("IdUser")
+                        .HasColumnType("integer")
+                        .HasColumnName("id_user");
 
                     b.Property<string>("Seat")
                         .IsRequired()
@@ -174,10 +179,14 @@ namespace api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("status");
 
-                    b.HasKey("idUser", "IdFlight")
-                        .HasName("book_pkey");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.HasIndex("IdFlight");
+
+                    b.HasIndex("IdUser");
 
                     b.ToTable("book");
                 });
@@ -511,13 +520,13 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Entities.Baggage", b =>
                 {
-                    b.HasOne("api.Entities.User", "SsnNavigation")
+                    b.HasOne("api.Entities.User", "UserNavigation")
                         .WithMany("Baggages")
-                        .HasForeignKey("Ssn")
-                        .HasConstraintName("baggage_ssn_fkey")
+                        .HasForeignKey("IdUser")
+                        .HasConstraintName("baggage_id_user_fkey")
                         .IsRequired();
 
-                    b.Navigation("SsnNavigation");
+                    b.Navigation("UserNavigation");
                 });
 
             modelBuilder.Entity("api.Entities.Book", b =>
@@ -528,15 +537,15 @@ namespace api.Migrations
                         .HasConstraintName("book_id_flight_fkey")
                         .IsRequired();
 
-                    b.HasOne("api.Entities.User", "SsnNavigation")
+                    b.HasOne("api.Entities.User", "UserNavigation")
                         .WithMany("Books")
-                        .HasForeignKey("idUser")
-                        .HasConstraintName("book_ssn_fkey")
+                        .HasForeignKey("IdUser")
+                        .HasConstraintName("book_id_user_fkey")
                         .IsRequired();
 
                     b.Navigation("IdFlightNavigation");
 
-                    b.Navigation("SsnNavigation");
+                    b.Navigation("UserNavigation");
                 });
 
             modelBuilder.Entity("api.Entities.Flight", b =>

@@ -6,13 +6,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace api.Entities
 {
-    public partial class BookDto
+    public partial class BaggageDto
     {
         [Required]
         public string Email { get; set; }
         [Required]
-        public int IdFlight { get; set; }
-        public string Seat { get; set; }
-        public string Status { get; set; }
+        public int Weight { get; set; }
+        [Required]
+        public string Color { get; set; }
     }
 }

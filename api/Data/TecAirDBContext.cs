@@ -37,31 +37,35 @@ namespace api.Data
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Id).IsUnique();
 
+                entity.Property(e => e.IdUser)
+                    .IsRequired()
+                    .HasColumnName("id_user");
+
                 entity.Property(e => e.Color)
                     .IsRequired()
                     .HasColumnName("color");
-
-                entity.Property(e => e.Ssn).HasColumnName("ssn");
 
                 entity.Property(e => e.Weight).HasColumnName("weight");
 
                 entity.Property(e => e.Status).HasColumnName("status");
 
-                entity.HasOne(d => d.SsnNavigation)
+                entity.HasOne(d => d.UserNavigation)
                     .WithMany(p => p.Baggages)
-                    .HasForeignKey(d => d.Ssn)
+                    .HasForeignKey(d => d.IdUser)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("baggage_ssn_fkey");
+                    .HasConstraintName("baggage_id_user_fkey");
             });
 
             modelBuilder.Entity<Book>(entity =>
             {
-                entity.HasKey(e => new { e.idUser, e.IdFlight })
-                    .HasName("book_pkey");
-
                 entity.ToTable("book");
 
-                entity.Property(e => e.idUser).HasColumnName("id_user");
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Id).IsUnique();
+
+                entity.Property(e => e.IdUser)
+                    .IsRequired()
+                    .HasColumnName("id_user");
 
                 entity.Property(e => e.IdFlight).HasColumnName("id_flight");
 
@@ -77,11 +81,11 @@ namespace api.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("book_id_flight_fkey");
 
-                entity.HasOne(d => d.SsnNavigation)
+                entity.HasOne(d => d.UserNavigation)
                     .WithMany(p => p.Books)
-                    .HasForeignKey(d => d.idUser)
+                    .HasForeignKey(d => d.IdUser)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("book_ssn_fkey");
+                    .HasConstraintName("book_id_user_fkey");
             });
 
             modelBuilder.Entity<Flight>(entity =>

@@ -34,16 +34,26 @@ namespace api
             }
         }
 
-        public static Boolean Insert_baggage(int ssn, int weight, string color)
+        public async static Task<Boolean> Insert_baggage(string email, int weight, string color)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"INSERT INTO baggage(ssn, weight, color) VALUES (" + ssn + ", " + weight + ", '" + color + "');";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
-                con.Open();
-
                 try
                 {
+                    string query = @"SELECT " + "\"Id\"" + " FROM " + "\"AspNetUsers\"" + " WHERE " + "\"Email\"" + " = '" + email + "';";
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                    con.Open();
+                    NpgsqlDataReader m = await cmd.ExecuteReaderAsync();
+                    int id = -1;
+                    while (m.Read())
+                        id = (int)m[0];
+                    con.Close();
+                    if (id == -1)
+                        return false;
+
+                    query = @"INSERT INTO baggage(id_user, weight, color) VALUES (" + id + ", " + weight + ", '" + color + "');";
+                    cmd = new NpgsqlCommand(query, con);
+                    con.Open();
                     int n = cmd.ExecuteNonQuery();
                     Console.Write("Baggage created");
                     con.Close();
@@ -74,7 +84,7 @@ namespace api
             }
         }
 
-        public async static Task<Boolean> Insert_book(string Email, int id_flight, string seat)
+        public async static Task<Boolean> Insert_book(string Email, int id_flight, string status)
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -88,8 +98,44 @@ namespace api
                     while (n.Read())
                         id = (int)n[0];
                     con.Close();
+                    if (id == -1)
+                        return false;
 
-                    query = @"INSERT INTO book(id_user, id_flight, seat) VALUES (" + id + ", " + id_flight + ", '" + seat + "');";
+                    query = @"INSERT INTO book(id_user, id_flight, status) VALUES (" + id + ", " + id_flight + ", '" + status + "');";
+                    cmd = new NpgsqlCommand(query, con);
+                    con.Open();
+
+                    int m = await cmd.ExecuteNonQueryAsync();
+                    con.Close();
+                    return true;
+                }
+                catch (Exception err)
+                {
+                    Console.Write(err);
+                    con.Close();
+                    return false;
+                }
+            }
+        }
+
+        public async static Task<Boolean> Update_book(string Email, int id_flight, string seat, string status)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                try
+                {
+                    string query = @"SELECT " + "\"Id\"" + " FROM " + "\"AspNetUsers\"" + " WHERE " + "\"Email\"" + " = '" + Email + "';";
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                    con.Open();
+                    NpgsqlDataReader n = await cmd.ExecuteReaderAsync();
+                    int id = -1;
+                    while (n.Read())
+                        id = (int)n[0];
+                    con.Close();
+                    if (id == -1)
+                        return false;
+
+                    query = @"UPDATE book SET seat = '" + seat + "', status = '" + status + "' WHERE id_user = " + id + " AND id_flight = " + id_flight + ";";
                     cmd = new NpgsqlCommand(query, con);
                     con.Open();
 

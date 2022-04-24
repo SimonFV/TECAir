@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace api.Migrations
 {
-    public partial class Start : Migration
+    public partial class Inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,14 +41,15 @@ namespace api.Migrations
                 name: "rute",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     departure = table.Column<string>(type: "text", nullable: false),
                     arrival = table.Column<string>(type: "text", nullable: false),
                     miles = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_rute", x => x.id);
+                    table.PrimaryKey("PK_rute", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,17 +89,18 @@ namespace api.Migrations
                 name: "flight",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     airplane_license = table.Column<string>(type: "text", nullable: false),
                     id_rute = table.Column<int>(type: "integer", nullable: false),
                     gate = table.Column<string>(type: "text", nullable: false),
-                    schedule = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    schedule = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     status = table.Column<string>(type: "text", nullable: false, defaultValueSql: "'In time'::text"),
                     deals = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_flight", x => x.id);
+                    table.PrimaryKey("PK_flight", x => x.Id);
                     table.ForeignKey(
                         name: "flight_airplane_license_fkey",
                         column: x => x.airplane_license,
@@ -109,7 +111,7 @@ namespace api.Migrations
                         name: "flight_id_rute_fkey",
                         column: x => x.id_rute,
                         principalTable: "rute",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -121,7 +123,7 @@ namespace api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     route_id = table.Column<int>(type: "integer", nullable: false),
                     place = table.Column<string>(type: "text", nullable: false),
-                    order = table.Column<int>(type: "integer", nullable: false)
+                    order_landing = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -130,7 +132,7 @@ namespace api.Migrations
                         name: "scale_id_rute_fkey",
                         column: x => x.route_id,
                         principalTable: "rute",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -261,18 +263,19 @@ namespace api.Migrations
                 name: "baggage",
                 columns: table => new
                 {
-                    uniqueid = table.Column<int>(type: "integer", nullable: false),
-                    ssn = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id_user = table.Column<int>(type: "integer", nullable: false),
                     weight = table.Column<int>(type: "integer", nullable: false),
                     color = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("baggage_pkey", x => x.uniqueid);
+                    table.PrimaryKey("PK_baggage", x => x.Id);
                     table.ForeignKey(
-                        name: "baggage_ssn_fkey",
-                        column: x => x.ssn,
+                        name: "baggage_id_user_fkey",
+                        column: x => x.id_user,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -282,23 +285,25 @@ namespace api.Migrations
                 name: "book",
                 columns: table => new
                 {
-                    ssn = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id_user = table.Column<int>(type: "integer", nullable: false),
                     id_flight = table.Column<int>(type: "integer", nullable: false),
                     seat = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("book_pkey", x => new { x.ssn, x.id_flight });
+                    table.PrimaryKey("PK_book", x => x.Id);
                     table.ForeignKey(
                         name: "book_id_flight_fkey",
                         column: x => x.id_flight,
                         principalTable: "flight",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "book_ssn_fkey",
-                        column: x => x.ssn,
+                        name: "book_id_user_fkey",
+                        column: x => x.id_user,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -347,9 +352,21 @@ namespace api.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_baggage_ssn",
+                name: "IX_baggage_Id",
                 table: "baggage",
-                column: "ssn");
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_baggage_id_user",
+                table: "baggage",
+                column: "id_user");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_book_Id",
+                table: "book",
+                column: "Id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_book_id_flight",
@@ -357,14 +374,31 @@ namespace api.Migrations
                 column: "id_flight");
 
             migrationBuilder.CreateIndex(
+                name: "IX_book_id_user",
+                table: "book",
+                column: "id_user");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_flight_airplane_license",
                 table: "flight",
                 column: "airplane_license");
 
             migrationBuilder.CreateIndex(
+                name: "IX_flight_Id",
+                table: "flight",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_flight_id_rute",
                 table: "flight",
                 column: "id_rute");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_rute_Id",
+                table: "rute",
+                column: "Id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_scale_Id",
