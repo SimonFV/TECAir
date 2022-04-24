@@ -22,7 +22,7 @@ namespace api
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"SELECT uniqueid,ssn,weight,color FROM baggage";
+                string query = @"SELECT " + "\"Id\"" + ",ssn,weight,color FROM baggage";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 NpgsqlDataReader n = cmd.ExecuteReader();
@@ -34,11 +34,11 @@ namespace api
             }
         }
 
-        public static Boolean Insert_baggage(int uniqueid, int ssn, int weight, string color)
+        public static Boolean Insert_baggage(int ssn, int weight, string color)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"INSERT INTO baggage(uniqueid, ssn, weight, color) VALUES (" + uniqueid + ", " + ssn + ", " + weight + ", '" + color + "');";
+                string query = @"INSERT INTO baggage(ssn, weight, color) VALUES (" + ssn + ", " + weight + ", '" + color + "');";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
 
@@ -159,7 +159,7 @@ namespace api
             List<FlightResponse> flights = new List<FlightResponse>();
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"SELECT flight.id, rute.departure, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
+                string query = @"SELECT flight." + "\"Id\"" + ", rute.departure, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
                 NpgsqlCommand cmd1 = new NpgsqlCommand(query, con);
                 con.Open();
                 NpgsqlDataReader n = await cmd1.ExecuteReaderAsync();
@@ -180,7 +180,7 @@ namespace api
                 con.Close();
 
                 int id_route = -1;
-                query = @"SELECT id FROM rute WHERE rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
+                query = @"SELECT " + "\"Id\"" + " FROM rute WHERE rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
                 NpgsqlCommand cmd2 = new NpgsqlCommand(query, con);
                 con.Open();
                 NpgsqlDataReader m = await cmd2.ExecuteReaderAsync();
@@ -213,7 +213,7 @@ namespace api
 
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"SELECT flight.id, rute.departure, rute.scale, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND flight.deals != 0";
+                string query = @"SELECT flight.Id, rute.departure, rute.scale, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND flight.deals != 0";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 NpgsqlDataReader n = cmd.ExecuteReader();
@@ -226,12 +226,27 @@ namespace api
             }
         }
 
-        public static Boolean Insert_flight(int id, string airplane_license, int id_rute, int gate, DateTimeOffset schedule)
+        public async static Task<Boolean> Insert_flight(string airplane_license, string departure, string arrival, string gate, DateTimeOffset schedule)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"insert into flight(id,airplane_license,id_rute,gate,schedule) values(" + id + ", '" + airplane_license + "', " + id_rute + ", '" + gate + "', '" + schedule + "'); UPDATE plane SET status = 'Occupied' WHERE airplane_license = '" + airplane_license + "'; ";
+                int id_rute = -1;
+                string query = @"SELECT " + "\"Id\"" + " FROM rute WHERE departure = '" + departure + "' AND arrival = '" + arrival + "';";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                NpgsqlDataReader m = await cmd.ExecuteReaderAsync();
+                while (m.Read())
+                    id_rute = (int)m[0];
+                con.Close();
+
+                if (id_rute == -1)
+                {
+                    Console.Write("Route not found");
+                    return false;
+                }
+
+                query = @"insert into flight(airplane_license,id_rute,gate,schedule) values('" + airplane_license + "', " + id_rute + ", '" + gate + "', '" + schedule + "'); UPDATE plane SET status = 'Occupied' WHERE airplane_license = '" + airplane_license + "'; ";
+                cmd = new NpgsqlCommand(query, con);
                 con.Open();
 
                 try
@@ -239,7 +254,6 @@ namespace api
                     int n = cmd.ExecuteNonQuery();
                     Console.Write("Flight created");
                     con.Close();
-                    return true;
                 }
                 catch
                 {
@@ -247,6 +261,7 @@ namespace api
                     con.Close();
                     return false;
                 }
+                return true;
             }
         }
 
@@ -266,26 +281,35 @@ namespace api
             }
         }
 
-        public static Boolean Insert_rute(int id, string departure, List<string> scale, string arrival, int miles)
+        public async static void Insert_rute(string departure, List<string> scale, string arrival, int miles)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"Insert into rute(id, departure, arrival, miles) values(" + id + ", '" + departure + "', '" + arrival + "', " + miles + ");";
+                string query = @"Insert into rute(departure, arrival, miles) values('" + departure + "', '" + arrival + "', " + miles + ");";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
 
                 try
                 {
                     int n = cmd.ExecuteNonQuery();
-                    Console.Write("Rute created");
                     con.Close();
                 }
-                catch
+                catch (Exception err)
                 {
-                    Console.Write("Error: Id Rute is in use");
+                    Console.Write(err);
                     con.Close();
-                    return false;
+                    return;
                 }
+
+                int id = -1;
+                query = @"SELECT " + "\"Id\"" + " FROM rute WHERE rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
+                cmd = new NpgsqlCommand(query, con);
+                NpgsqlDataReader m = await cmd.ExecuteReaderAsync();
+                con.Open();
+                while (m.Read())
+                    id = (int)m[0];
+                con.Close();
+
 
                 for (int i = 0; i < scale.Count; i++)
                 {
@@ -302,11 +326,9 @@ namespace api
                     {
                         Console.Write(err);
                         con.Close();
-                        return false;
+                        return;
                     }
                 }
-                return true;
-
             }
         }
 

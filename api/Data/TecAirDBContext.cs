@@ -32,14 +32,10 @@ namespace api.Data
 
             modelBuilder.Entity<Baggage>(entity =>
             {
-                entity.HasKey(e => e.Uniqueid)
-                    .HasName("baggage_pkey");
-
                 entity.ToTable("baggage");
 
-                entity.Property(e => e.Uniqueid)
-                    .ValueGeneratedNever()
-                    .HasColumnName("uniqueid");
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Id).IsUnique();
 
                 entity.Property(e => e.Color)
                     .IsRequired()
@@ -92,9 +88,8 @@ namespace api.Data
             {
                 entity.ToTable("flight");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Id).IsUnique();
 
                 entity.Property(e => e.AirplaneLicense)
                     .IsRequired()
@@ -155,9 +150,8 @@ namespace api.Data
             {
                 entity.ToTable("rute");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Id).IsUnique();
 
                 entity.Property(e => e.Arrival)
                     .IsRequired()
