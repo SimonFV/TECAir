@@ -13,83 +13,36 @@ namespace api.Controllers
     [ApiController]
     [Route("[controller]")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class FlightsController : ControllerBase
+    public class ReservationsController : ControllerBase
     {
         private readonly TecAirDBContext _context;
 
-        public FlightsController(TecAirDBContext context)
+        public ReservationsController(TecAirDBContext context)
         {
             _context = context;
         }
 
 
         [HttpPost]
-        [Route("flightsByRoute")]
-        public async Task<IActionResult> flightsByRoute(RouteReq route)
+        [Route("getSeatsFlight/{id}")]
+        public async Task<IActionResult> getSeatsFlight(int id)
         {
             if (ModelState.IsValid)
             {
-                var flights = await DAL.Get_flight_by_rute(route.Departure, route.Arrival);
-                return Ok(flights);
-            }
-            return new JsonResult("Something went wrong") { StatusCode = 500 };
-        }
-
-
-
-        [HttpPost]
-        [Route("addFlight")]
-        public async Task<IActionResult> AddFlight(FlightDto flight)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await DAL.Insert_flight(flight.PlaneId, flight.Departure,
-                                    flight.Arrival, flight.Gate, flight.Schedule.ToString("yyyy-MM-dd HH:mm:ss"));
-                if (result)
+                try
                 {
-                    return Ok();
+                    var result = await DAL.get_seats_flight(id);
+                    return Ok(result);
                 }
-                return new JsonResult("Problem while creating the flight.") { StatusCode = 500 };
-            }
-
-            return new JsonResult("Invalid model for flight.") { StatusCode = 500 };
-        }
-
-        [HttpPost]
-        [Route("addRoute")]
-        public async Task<IActionResult> AddRoute(RouteDto route)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await DAL.Insert_rute(route.Departure, route.Scale,
-                                    route.Arrival, route.Miles);
-                if (result)
+                catch
                 {
-                    return Ok();
+                    return new JsonResult("Problem while retrieving the seats.") { StatusCode = 500 };
                 }
-                return new JsonResult("Problem while creating the route.") { StatusCode = 500 };
-            }
-
-            return new JsonResult("Invalid model for route.") { StatusCode = 500 };
-        }
-
-        [HttpPost]
-        [Route("addPlane")]
-        public async Task<IActionResult> AddPlane(PlaneDto plane)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await DAL.Insert_plane(plane.AirplaneLicense, plane.Capacity,
-                                    plane.Model);
-                if (result)
-                {
-                    return Ok();
-                }
-                return new JsonResult("Problem while creating the plane.") { StatusCode = 500 };
             }
 
             return new JsonResult("Invalid model for plane.") { StatusCode = 500 };
         }
+
 
         /*
        [HttpGet("items/{id}")]

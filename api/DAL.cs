@@ -125,7 +125,6 @@ namespace api
                 try
                 {
                     int n = await cmd.ExecuteNonQueryAsync();
-                    Console.Write("Airplane created");
                     con.Close();
                     return true;
                 }
@@ -226,7 +225,7 @@ namespace api
             }
         }
 
-        public async static Task<Boolean> Insert_flight(string airplane_license, string departure, string arrival, string gate, DateTimeOffset schedule)
+        public async static Task<Boolean> Insert_flight(string airplane_license, string departure, string arrival, string gate, string schedule)
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -254,9 +253,9 @@ namespace api
                     int n = cmd.ExecuteNonQuery();
                     con.Close();
                 }
-                catch
+                catch (Exception err)
                 {
-                    Console.Write("Error: Id Flight is in use");
+                    Console.Write(err);
                     con.Close();
                     return false;
                 }
@@ -372,7 +371,7 @@ namespace api
             }
         }
 
-        public static void Get_user()
+        public static void Get_users()
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -386,6 +385,24 @@ namespace api
 
                 con.Close();
             }
+        }
+
+        public async static Task<List<int>> get_seats_flight(int id_flight)
+        {
+            List<int> seats = new();
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"SELECT seat FROM book WHERE id_flight = " + id_flight + ");";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                NpgsqlDataReader n = await cmd.ExecuteReaderAsync();
+
+                while (n.Read())
+                    seats.Add(Int32.Parse((string)n[0]));
+
+                con.Close();
+            }
+            return seats;
         }
 
         public static Boolean Insert_user(int ssn, int schoolid, string first_name, string last_name_1, string last_name_2, int phone, string email, string university, string password)
