@@ -18,6 +18,86 @@ namespace api
         }
         */
 
+        public static void Get_baggage()
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"SELECT uniqueid,ssn,weight,color FROM baggage";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                NpgsqlDataReader n = cmd.ExecuteReader();
+
+                while (n.Read())
+                    Console.Write("{0}\t{1}\t{2}\t{3} \n", n[0], n[1], n[2], n[3]);
+
+                con.Close();
+            }
+        }
+        
+        public static Boolean Insert_baggage(int uniqueid, int ssn, int weight, string color)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"INSERT INTO baggage(uniqueid, ssn, weight, color) VALUES (" + uniqueid + ", " + ssn + ", " + weight + ", '"+ color + "');";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+
+                try
+                {
+                    int n = cmd.ExecuteNonQuery();
+                    Console.Write("Baggage created");
+                    con.Close();
+                    return true;
+                }
+                catch
+                {
+                    Console.Write("Error");
+                    con.Close();
+                    return false;
+                }
+            }
+        }
+        
+        public static void Get_book()
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"SELECT ssn,id_flight,seat FROM book";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                NpgsqlDataReader n = cmd.ExecuteReader();
+
+                while (n.Read())
+                    Console.Write("{0}\t{1}\t{2} \n", n[0], n[1], n[2]);
+
+                con.Close();
+            }
+        }
+        
+        public static Boolean Insert_book(int ssn, int id_flight, string seat)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"INSERT INTO book(ssn, id_flight, seat) VALUES (" + ssn + ", " + id_flight + ", '" + seat + "');";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+
+                try
+                {
+                    int n = cmd.ExecuteNonQuery();
+                    Console.Write("Book created");
+                    con.Close();
+                    return true;
+                }
+                catch
+                {
+                    Console.Write("Error");
+                    con.Close();
+                    return false;
+                }
+            }
+        }
+
         public static void Get_planes()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -229,7 +309,86 @@ namespace api
 
             }
         }
+        
+        public static void Get_schoolid()
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"SELECT * FROM schoolid";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                NpgsqlDataReader n = cmd.ExecuteReader();
 
+                while (n.Read())
+                    Console.Write("{0}\t{1} \n", n[0], n[1]);
+
+                con.Close();
+            }
+        }
+        
+        public static Boolean Insert_schoolid(int number, int mile)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"INSERT INTO schoolid(number, mile) VALUES (" + number + ", " + mile + ");";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+
+                try
+                {
+                    int n = cmd.ExecuteNonQuery();
+                    Console.Write("School ID created");
+                    con.Close();
+                    return true;
+                }
+                catch
+                {
+                    Console.Write("Error");
+                    con.Close();
+                    return false;
+                }
+            }
+        }
+        
+        public static void Get_user()
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"SELECT ssn,schoolid,first_name,last_name_1,last_name_2,phone,email,university FROM user";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                NpgsqlDataReader n = cmd.ExecuteReader();
+
+                while (n.Read())
+                    Console.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7} \n", n[0], n[1], n[2], n[3], n[4], n[5], n[6], n[7]);
+
+                con.Close();
+            }
+        }
+        
+        public static Boolean Insert_user(int ssn, int schoolid, string first_name, string last_name_1, string last_name_2, int phone, string email, string university, string password)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"INSERT INTO user(ssn,schoolid,first_name,last_name_1,last_name_2,phone,email,university,password) VALUES ("+ ssn + ","+ schoolid + ",'"+ first_name + "','"+ last_name_1 + "','"+ last_name_2 + "',"+ phone + ",'"+ email + "','"+ university + "','"+ password + "');";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+
+                try
+                {
+                    int n = cmd.ExecuteNonQuery();
+                    Console.Write("User created");
+                    con.Close();
+                    return true;
+                }
+                catch
+                {
+                    Console.Write("Error");
+                    con.Close();
+                    return false;
+                }
+            }
+        }
 
         private static void TestConnection()
         {
@@ -251,7 +410,7 @@ namespace api
         private static NpgsqlConnection GetConnection()
         {
             // Enter password
-            return new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=postgres;Password=1234;Database=TecAirDB;");
+            return new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=postgres;Password=1234;Database=tecair;");
         }
     }
 }

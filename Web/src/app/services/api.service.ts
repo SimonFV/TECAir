@@ -8,7 +8,7 @@ import { map, Observable } from 'rxjs';
 export class ApiService {
 
   constructor(private http: HttpClient) { }
-
+  
 
   postRegister(user: JSON) :Observable<any> {
     let header = new HttpHeaders().set('Type-contet', 'aplication/json');
@@ -17,5 +17,13 @@ export class ApiService {
   postLogIn(user: JSON): Observable<any>{
     let header = new HttpHeaders().set('Type-contet', 'aplication/json');
     return this.http.post<JSON[]>('http://localhost:5001/Authentication/login', user, { headers: header, observe:'response'});
+  }
+  postAdd(flight: JSON):Observable<any>{
+    let header = new HttpHeaders().set('Type-contet', 'aplication/json');
+    return this.http.post<JSON[]>('http://localhost:5001/Flights/add', flight, { headers: header, observe:'response'});
+  }
+  postRoute(route: JSON):Observable<any>{
+    let header = new HttpHeaders().set('Type-contet', 'aplication/json');
+    return this.http.post<JSON[]>('http://localhost:5001/Flights/flightsByRoute', route, { headers: header, observe:'response'});
   }
 }

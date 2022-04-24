@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-opn-flight',
@@ -9,34 +10,44 @@ import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/
 export class OpnFlightComponent implements OnInit {
   public form!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+    private service: ApiService) { }
 
   ngOnInit(): void {
     this.form= this.formBuilder.group({
-      airplane_ID: ['',[  ]],
-      from: ['',[]],
-      stops: this.formBuilder.array([]),
-      to: ['',[]]
+      PlaneId: ['',[  ]],
+      Departure: ['',[]],
+      Scale: this.formBuilder.array([]),
+      Arrival: ['',[]]
     });
   }
 
-  get stops(){
-    return this.form.get('stops') as FormArray; 
+  get Scale(){
+    return this.form.get('Scale') as FormArray; 
   }
 
 
   getData(){
+    console.log(this.Scale.value[0].Scale);
+    for(let stop in this.Scale.value){
+      this.Scale.value[stop]=this.Scale.value[stop].Scale;
+    }
+    console.log(this.Scale.value[0].Scale);
+    
+    /*this.service.postAdd(this.form.value).subscribe(resp=>{
+      console.log(resp);
+    })*/
     console.log(this.form.value);
     
   }
   addStop(){
     const stopsFormGroup= this.formBuilder.group({
-      stop: ''
+      Scale: ''
     });
-    this.stops.push(stopsFormGroup);
+    this.Scale.push(stopsFormGroup);
   }
   deleteStop(i: number){
-    this.stops.removeAt(i);
+    this.Scale.removeAt(i);
   }
 
 }

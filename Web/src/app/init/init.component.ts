@@ -18,6 +18,7 @@ export class InitComponent implements OnInit {
     ) { 
     
   }
+  
   public token: any;
   data:any=[];
   student:boolean=false;
@@ -77,7 +78,6 @@ export class InitComponent implements OnInit {
     }else{
       this.router.navigate(["/reservations"]);
     }
-    
     
   }
 

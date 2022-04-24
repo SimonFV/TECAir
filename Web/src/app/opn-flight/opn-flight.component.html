@@ -5,20 +5,20 @@
 <form [formGroup]="form" (submit)="getData()">
     <div class="col-auto mt-3  col-6 mx-auto">
         <div class="form-floating">
-            <input id="airplane ID" class="form-control" type="text" formControlName="airplane_ID"
+            <input id="airplane ID" class="form-control" type="text" formControlName="PlaneId"
                 placeholder="Airplane ID">
             <label for="floatingInput">Airplane ID</label>
         </div>
         <div class="form-floating">
-            <input id="Origin" class="form-control mt-2" type="text" formControlName="from" placeholder="From">
+            <input id="Origin" class="form-control mt-2" type="text" formControlName="Departure" placeholder="From">
             <label for="floatingInput">From</label>
         </div>
 
-        <div formArrayName="stops" *ngFor="let stop of stops.controls; let i= index">
+        <div formArrayName="Scale" *ngFor="let stop of Scale.controls; let i= index">
             <div [formGroupName]="i">
                 <div class=" input-group mb-3 mt-2 ">
                     <div class="form-floating flex-grow-1">
-                        <input id="stop" class="form-control " type="text" formControlName="stop" placeholder="Stop">
+                        <input id="stop" class="form-control " type="text" formControlName="Scale" placeholder="Stop">
                         <label for="floatingInput">Stop</label>
                     </div>
                     <button type="button" id="button-addon1" class="btn btn-outline-danger" (click)="deleteStop(i)">Remove stop</button>
@@ -34,7 +34,7 @@
 
 
         <div class="form-floating">
-            <input id="to" class="form-control mt-2" type="text" formControlName="to" placeholder="To">
+            <input id="to" class="form-control mt-2" type="text" formControlName="Arrival" placeholder="To">
             <label for="floatingInput">To</label>
         </div>
         <div class="text-center mt-3" id="alertDiv"> </div>
