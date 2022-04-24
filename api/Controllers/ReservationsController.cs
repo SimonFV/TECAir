@@ -40,7 +40,27 @@ namespace api.Controllers
                 }
             }
 
-            return new JsonResult("Invalid model for plane.") { StatusCode = 500 };
+            return new JsonResult("Invalid value for id.") { StatusCode = 500 };
+        }
+
+        [HttpPost]
+        [Route("addBook")]
+        public async Task<IActionResult> addBook(BookDto book)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var result = await DAL.Insert_book(book.Ssn, book.IdFlight, book.Seat);
+                    return Ok(result);
+                }
+                catch
+                {
+                    return new JsonResult("Problem while adding the book.") { StatusCode = 500 };
+                }
+            }
+
+            return new JsonResult("Invalid model for book.") { StatusCode = 500 };
         }
 
 

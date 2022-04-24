@@ -74,7 +74,7 @@ namespace api
             }
         }
 
-        public static Boolean Insert_book(int ssn, int id_flight, string seat)
+        public async static Task<Boolean> Insert_book(int ssn, int id_flight, string seat)
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -84,7 +84,7 @@ namespace api
 
                 try
                 {
-                    int n = cmd.ExecuteNonQuery();
+                    int n = await cmd.ExecuteNonQueryAsync();
                     con.Close();
                     return true;
                 }
@@ -167,7 +167,7 @@ namespace api
                 con.Close();
 
                 query = @"SELECT flight." + "\"Id\"" + ", rute.departure, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.id_rute ="
-                     + id_route + " AND flight.airplane_license = plane.airplane_license AND flight.status != 'Close' AND rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
+                     + id_route + " AND flight.airplane_license = plane.airplane_license AND flight.status != 'Close' AND flight.id_rute = rute." + "\"Id\"" + ";";
                 NpgsqlCommand cmd1 = new NpgsqlCommand(query, con);
                 con.Open();
                 NpgsqlDataReader n = await cmd1.ExecuteReaderAsync();
