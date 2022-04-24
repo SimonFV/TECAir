@@ -114,7 +114,7 @@ namespace api
             }
         }
 
-        public static Boolean Insert_plane(string airplane_license, int capacity, string model)
+        public async static Task<Boolean> Insert_plane(string airplane_license, int capacity, string model)
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -124,7 +124,7 @@ namespace api
 
                 try
                 {
-                    int n = cmd.ExecuteNonQuery();
+                    int n = await cmd.ExecuteNonQueryAsync();
                     Console.Write("Airplane created");
                     con.Close();
                     return true;
@@ -252,7 +252,6 @@ namespace api
                 try
                 {
                     int n = cmd.ExecuteNonQuery();
-                    Console.Write("Flight created");
                     con.Close();
                 }
                 catch
@@ -261,8 +260,8 @@ namespace api
                     con.Close();
                     return false;
                 }
-                return true;
             }
+            return true;
         }
 
         public static void Get_rutes()
@@ -281,7 +280,7 @@ namespace api
             }
         }
 
-        public async static void Insert_rute(string departure, List<string> scale, string arrival, int miles)
+        public async static Task<Boolean> Insert_rute(string departure, List<string> scale, string arrival, int miles)
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -291,21 +290,21 @@ namespace api
 
                 try
                 {
-                    int n = cmd.ExecuteNonQuery();
+                    NpgsqlDataReader n = await cmd.ExecuteReaderAsync();
                     con.Close();
                 }
                 catch (Exception err)
                 {
                     Console.Write(err);
                     con.Close();
-                    return;
+                    return false;
                 }
 
                 int id = -1;
                 query = @"SELECT " + "\"Id\"" + " FROM rute WHERE rute.departure = '" + departure + "' AND rute.arrival = '" + arrival + "';";
                 cmd = new NpgsqlCommand(query, con);
-                NpgsqlDataReader m = await cmd.ExecuteReaderAsync();
                 con.Open();
+                NpgsqlDataReader m = await cmd.ExecuteReaderAsync();
                 while (m.Read())
                     id = (int)m[0];
                 con.Close();
@@ -326,10 +325,11 @@ namespace api
                     {
                         Console.Write(err);
                         con.Close();
-                        return;
+                        return false;
                     }
                 }
             }
+            return true;
         }
 
         public static void Get_schoolid()

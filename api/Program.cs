@@ -30,8 +30,8 @@ namespace api
             DAL.Insert_rute(6, "SJO", null, "JFK", 556);
             DAL.Insert_rute(7, "JFK", "HOU", "LAX", 556);
             DAL.Insert_rute(8, "JFK", null, "LAX", 556);*/
-            var result = DAL.Get_flight_by_rute("JFK", "SJO").Result;
-            //CreateHostBuilder(args).Build().Run();
+            //var result = DAL.Get_flight_by_rute("JFK", "SJO").Result;
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

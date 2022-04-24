@@ -6,6 +6,7 @@ using api.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using api.Dtos.Requests;
+using System;
 
 namespace api.Controllers
 {
@@ -35,21 +36,59 @@ namespace api.Controllers
         }
 
 
-        
+
         [HttpPost]
-        [Route("add")]
+        [Route("addFlight")]
         public async Task<IActionResult> AddFlight(FlightDto flight)
         {
             if (ModelState.IsValid)
             {
-
-                //DAL.Insert_flight(0, flight.PlaneId, 0, 0, "s");
-
-                //return CreatedAtAction("GetItem", new { data.Id }, data);
-                return Ok();
+                var result = await DAL.Insert_flight(flight.PlaneId, flight.Departure,
+                                    flight.Arrival, flight.Gate, flight.Schedule);
+                if (result)
+                {
+                    return Ok();
+                }
+                return new JsonResult("Problem while creating the flight.") { StatusCode = 500 };
             }
 
-            return new JsonResult("Something went wrong") { StatusCode = 500 };
+            return new JsonResult("Invalid model for flight.") { StatusCode = 500 };
+        }
+
+        [HttpPost]
+        [Route("addRoute")]
+        public async Task<IActionResult> AddRoute(RouteDto route)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await DAL.Insert_rute(route.Departure, route.Scale,
+                                    route.Arrival, route.Miles);
+                if (result)
+                {
+                    return Ok();
+                }
+                return new JsonResult("Problem while creating the route.") { StatusCode = 500 };
+            }
+
+            return new JsonResult("Invalid model for route.") { StatusCode = 500 };
+        }
+
+        [HttpPost]
+        [Route("addPlane")]
+        public async Task<IActionResult> AddPlane(PlaneDto plane)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await DAL.Insert_plane(plane.AirplaneLicense, plane.Capacity,
+                                    plane.Model);
+                if (result)
+                {
+                    return Ok();
+                }
+                return new JsonResult("Problem while creating the plane.") { StatusCode = 500 };
+            }
+
+            return new JsonResult("Invalid model for plane.") { StatusCode = 500 };
         }
 
         /*
