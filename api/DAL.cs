@@ -262,25 +262,56 @@ namespace api
             return flights;
         }
 
-        public static void Get_flight_by_deals()
+        public async static Task<List<FlightResponse>> Get_flights_deals()
         {
-
+            List<FlightResponse> flights = new List<FlightResponse>();
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"SELECT flight.Id, rute.departure, rute.scale, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane WHERE flight.status != 'Close' AND flight.deals != 0";
+                string query = query = @"SELECT flight." + "\"Id\"" + ", rute.departure, rute.arrival, plane.model, flight.schedule, flight.deals FROM flight,rute,plane "
+                    + "WHERE flight.deals != 0 AND flight.airplane_license = plane.airplane_license AND flight.status != 'Close' AND flight.id_rute = rute." + "\"Id\"" + ";";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
-                NpgsqlDataReader n = cmd.ExecuteReader();
+                NpgsqlDataReader n = await cmd.ExecuteReaderAsync();
 
                 while (n.Read())
                 {
-                    Console.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6} \n", n[0], n[1], n[2], n[3], n[4], n[5], n[6]);
+                    var flight = new FlightResponse()
+                    {
+                        Id = (int)n[0],
+                        Departure = (string)n[1],
+                        Arrival = (string)n[2],
+                        Model = (string)n[3],
+                        Schedule = (DateTime)n[4],
+                        Deals = (n[5] as int?) ?? 0
+                    };
+                    flights.Add(flight);
                 }
                 con.Close();
+
+                foreach (var flight in flights)
+                {
+                    query = @"SELECT place FROM scale WHERE scale.route_id = " +
+                        "(SELECT " + "\"Id\"" + " FROM rute WHERE rute.departure = '" + flight.Departure + "' AND rute.arrival = '" + flight.Arrival + "');";
+                    NpgsqlCommand cmd3 = new NpgsqlCommand(query, con);
+                    con.Open();
+                    NpgsqlDataReader o = await cmd3.ExecuteReaderAsync();
+                    List<string> scales = new List<string>();
+
+                    while (o.Read())
+                    {
+                        scales.Add((string)o[0]);
+                    }
+
+                    for (int i = 0; i < flights.Count; i++)
+                        flights[i].Scale = scales;
+
+                    con.Close();
+                }
             }
+            return flights;
         }
 
-        public async static Task<Boolean> Insert_flight(string airplane_license, string departure, string arrival, string gate, string schedule)
+        public async static Task<Boolean> Insert_flight(string airplane_license, string departure, string arrival, string gate, string schedule, int deals)
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -299,13 +330,37 @@ namespace api
                     return false;
                 }
 
-                query = @"insert into flight(airplane_license,id_rute,gate,schedule) values('" + airplane_license + "', " + id_rute + ", '" + gate + "', '" + schedule + "'); UPDATE plane SET status = 'Occupied' WHERE airplane_license = '" + airplane_license + "'; ";
+                query = @"insert into flight(airplane_license,id_rute,gate,schedule,deals) values('" + airplane_license + "', " +
+                            id_rute + ", '" + gate + "', '" + schedule + "', " + deals + "); UPDATE plane SET status = 'Occupied' WHERE airplane_license = '" +
+                            airplane_license + "'; ";
                 cmd = new NpgsqlCommand(query, con);
                 con.Open();
 
                 try
                 {
                     int n = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception err)
+                {
+                    Console.Write(err);
+                    con.Close();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public async static Task<Boolean> Update_flight_deal(int id_flight, int deal)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"UPDATE flight SET deals = " + deal + " WHERE " + "\"Id\"" + " = " + id_flight + ";";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                try
+                {
+                    int n = await cmd.ExecuteNonQueryAsync();
                     con.Close();
                 }
                 catch (Exception err)

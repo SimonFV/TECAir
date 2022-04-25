@@ -22,6 +22,17 @@ namespace api.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        [Route("flightsDeals")]
+        public async Task<IActionResult> flightsDeals()
+        {
+            if (ModelState.IsValid)
+            {
+                var flights = await DAL.Get_flights_deals();
+                return Ok(flights);
+            }
+            return new JsonResult("Something went wrong") { StatusCode = 500 };
+        }
 
         [HttpPost]
         [Route("flightsByRoute")]
@@ -35,8 +46,6 @@ namespace api.Controllers
             return new JsonResult("Something went wrong") { StatusCode = 500 };
         }
 
-
-
         [HttpPost]
         [Route("addFlight")]
         public async Task<IActionResult> AddFlight(FlightDto flight)
@@ -44,7 +53,9 @@ namespace api.Controllers
             if (ModelState.IsValid)
             {
                 var result = await DAL.Insert_flight(flight.PlaneId, flight.Departure,
-                                    flight.Arrival, flight.Gate, flight.Schedule.ToString("yyyy-MM-dd HH:mm:ss"));
+                                    flight.Arrival, flight.Gate,
+                                    flight.Schedule.ToString("yyyy-MM-dd HH:mm:ss"),
+                                    flight.Deals);
                 if (result)
                 {
                     return Ok();
@@ -89,6 +100,23 @@ namespace api.Controllers
             }
 
             return new JsonResult("Invalid model for plane.") { StatusCode = 500 };
+        }
+
+        [HttpPut]
+        [Route("updateDeal")]
+        public async Task<IActionResult> addDeal(DealDto deal)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await DAL.Update_flight_deal(deal.IdFlight, deal.Deal);
+                if (result)
+                {
+                    return Ok();
+                }
+                return new JsonResult("Problem while updating the deal.") { StatusCode = 500 };
+            }
+
+            return new JsonResult("Invalid model for deal.") { StatusCode = 500 };
         }
 
     }
