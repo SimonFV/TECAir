@@ -28,7 +28,7 @@ export class SalesManagementComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.deletePromo(0);
+    this.sales.splice(0,1);
     this.form=this.formBuilder.group({
       From:['',[]],
       To:['',[]],
@@ -86,14 +86,22 @@ export class SalesManagementComponent implements OnInit {
     })
   }
   deletePromo(i: number){
-    this.sales.splice(i,1);
+    
     console.log("DELETE: "+this.sales);
+    this.service.putDeal({
+      "idFlight":this.sales[i].idFlight,
+      "deal":0
+    }).subscribe(resp=>{
+      console.log(resp);
+      
+    })
+    this.sales.splice(i,1);
   }
   editPromo(i:number, flag:boolean){
     if(!flag){
       this.edit=!this.edit;
     }else{
-      this.sales[i]=this.temp.value;
+      this.sales[i]=this.form.value;
       this.edit=!this.edit;
     }
     this.service.putDeal({
@@ -101,7 +109,6 @@ export class SalesManagementComponent implements OnInit {
       "deal":Number(this.form.value.Discount)
     }).subscribe(resp=>{
       console.log(resp);
-      
     })
     
   }
