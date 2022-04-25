@@ -10,14 +10,12 @@ namespace api
 {
     public static class DAL
     {
-        /*
-        static void Main(string[] args)
-        {
-            TestConnection();
-            Console.ReadKey();
-        }
+        /* 
+        Get Baggage
+        Returns all bags in the database.
+        @param: void
+        @throws: void
         */
-
         public static void Get_baggage()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -34,6 +32,18 @@ namespace api
             }
         }
 
+        /* 
+        Insert Baggage
+        Create a baggage.
+        @param:
+            Email: Owner email
+            Weight: Baggage weight
+            Color: Baggage color
+        @throws: 
+            Boolean: 
+                True if the Baggage is create
+                False if not
+        */
         public async static Task<Boolean> Insert_baggage(string email, int weight, string color)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -68,6 +78,12 @@ namespace api
             }
         }
 
+        /* 
+        Get Book
+        Returns all Books in the database.
+        @param: void
+        @throws: void
+        */
         public static void Get_book()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -84,6 +100,18 @@ namespace api
             }
         }
 
+        /* 
+        Insert Book
+        Create a Book
+        @param:
+            Email: Customer email
+            Id_flight: Flight ID
+            Status: Status of the book 
+        @throws:
+            Boolean: 
+                True if the book is create
+                False if not
+        */
         public async static Task<Boolean> Insert_book(string Email, int id_flight, string status)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -118,6 +146,19 @@ namespace api
             }
         }
 
+        /* 
+        Update Book
+        Actualize Book
+        @param:
+            Email: Customer email
+            Id_flight: Flight ID
+            Seat: Flight Seat
+            Status: Status of the book
+        @throws:
+            Boolean: 
+                True if the book is update
+                False if not
+        */
         public async static Task<Boolean> Update_book(string Email, int id_flight, string seat, string status)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -152,6 +193,12 @@ namespace api
             }
         }
 
+        /* 
+        Get Planes
+        Returns all planes free in the database.
+        @param: void
+        @throws: void
+        */
         public static void Get_planes()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -168,6 +215,18 @@ namespace api
             }
         }
 
+        /* 
+        Insert Plane
+        Create a Plane
+        @param:
+            Airplane_license: License Airplane
+            Capacity: Airplane capacity
+            Model: Airplane model
+        @throws:
+            Boolean: 
+                True if the plane is create
+                False if not
+        */
         public async static Task<Boolean> Insert_plane(string airplane_license, int capacity, string model)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -191,6 +250,12 @@ namespace api
             }
         }
 
+        /* 
+        Get Flight
+        Returns all flight no close in the database.
+        @param: void
+        @throws: void
+        */
         public static void Get_flight()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -207,6 +272,15 @@ namespace api
             }
         }
 
+        /* 
+        Get Flight by Rute
+        Returns all flights that meet the condition in the database.
+        @param:
+            Departure: Departure of the flight
+            Arrival: Arrival of the flight
+        @throws: 
+            List of Flight
+        */
         public async static Task<List<FlightResponse>> Get_flight_by_rute(string departure, string arrival)
         {
             List<FlightResponse> flights = new List<FlightResponse>();
@@ -262,6 +336,13 @@ namespace api
             return flights;
         }
 
+        /* 
+        Get Flight by Deals
+        Returns all flights who have deals in the database.
+        @param: void
+        @throws: 
+            List of Flight
+        */
         public async static Task<List<FlightResponse>> Get_flights_deals()
         {
             List<FlightResponse> flights = new List<FlightResponse>();
@@ -287,7 +368,6 @@ namespace api
                     flights.Add(flight);
                 }
                 con.Close();
-
                 foreach (var flight in flights)
                 {
                     query = @"SELECT place FROM scale WHERE scale.route_id = " +
@@ -311,7 +391,21 @@ namespace api
             return flights;
         }
 
-        public async static Task<Boolean> Insert_flight(string airplane_license, string departure, string arrival, string gate, string schedule, int deals)
+        /* 
+        Insert Flight
+        Create a Flight
+        @param:
+            Airplane_license: Airplane License of the plane
+            Departure: Departure of the flight
+            Arrival: Arrival of the flight
+            Gate: Boarding gate
+            Schedule: Departure time
+        @throws:
+            Boolean: 
+                True if the Flight is create
+                False if not
+        */
+         public async static Task<Boolean> Insert_flight(string airplane_license, string departure, string arrival, string gate, string schedule, int deals)
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -351,6 +445,17 @@ namespace api
             return true;
         }
 
+        /* 
+        Update Flight Deal
+        Modify the deal of the flight
+        @param: 
+            Id_flight: Flight who want to modificate
+            Deal: New deal
+        @throws: 
+            Boolean: 
+                True if the Flight is update
+                False if not
+        */
         public async static Task<Boolean> Update_flight_deal(int id_flight, int deal)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -373,6 +478,12 @@ namespace api
             return true;
         }
 
+        /* 
+        Get Rutes
+        Returns all rutes in the database.
+        @param: void
+        @throws: void
+        */
         public static void Get_rutes()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -389,6 +500,19 @@ namespace api
             }
         }
 
+        /* 
+        Insert Rute
+        Create a rute
+        @param:
+            Departure: Departure of the rute
+            Scale: Scale of the rute
+            Arrival: Arrival of the rute
+            Miles: Miles of the rute
+        @throws:
+            Boolean: 
+                True if the rute is create
+                False if not
+        */
         public async static Task<Boolean> Insert_rute(string departure, List<string> scale, string arrival, int miles)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -441,6 +565,12 @@ namespace api
             return true;
         }
 
+        /* 
+        Get School ID
+        Returns all School ID in the database.
+        @param: void
+        @throws: void
+        */
         public static void Get_schoolid()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -457,6 +587,17 @@ namespace api
             }
         }
 
+        /* 
+        Insert School ID
+        Create a School ID
+        @param:
+            Number: College ID
+            Mile: Accumulated miles
+        @throws:
+            Boolean: 
+                True if the School ID is create
+                False if not
+        */
         public static Boolean Insert_schoolid(int number, int mile)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -481,6 +622,12 @@ namespace api
             }
         }
 
+        /* 
+        Get Users
+        Returns all users ID in the database.
+        @param: void
+        @throws: void
+        */
         public static void Get_users()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -497,6 +644,14 @@ namespace api
             }
         }
 
+        /* 
+        Get Seats by Flight
+        Returns all seats in the specific flight.
+        @param:
+            Id_flight: Flight ID
+        @throws:
+            List of Seats
+        */
         public async static Task<List<SeatsResponse>> get_seats_flight(int id_flight)
         {
             List<SeatsResponse> seats = new();
@@ -515,6 +670,24 @@ namespace api
             return seats;
         }
 
+        /* 
+        Insert User
+        Create a Customer
+        @param:
+            SSN
+            School ID
+            First Name
+            Last Name 1
+            Last Name 2
+            Phone
+            Email
+            University
+            Password
+        @throws:
+            Boolean: 
+                True if the customer is create
+                False if not
+        */
         public static Boolean Insert_user(int ssn, int schoolid, string first_name, string last_name_1, string last_name_2, int phone, string email, string university, string password)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -539,6 +712,12 @@ namespace api
             }
         }
 
+        /* 
+        TestConnection
+        Test the connection with the Data Base
+        @param: void
+        @throws: void
+        */
         private static void TestConnection()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -556,9 +735,14 @@ namespace api
             }
         }
 
+        /* 
+        GetConnection
+        Define the connection with the Data Base
+        @param: void
+        @throws: Data Base Connection
+        */
         private static NpgsqlConnection GetConnection()
         {
-            // Enter password
             return new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=postgres;Password=1234;Database=TecAirDB;");
         }
     }
