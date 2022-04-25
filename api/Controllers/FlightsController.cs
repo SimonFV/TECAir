@@ -22,9 +22,22 @@ namespace api.Controllers
             _context = context;
         }
 
+
+        [HttpGet]
+        [Route("flights")]
+        public async Task<IActionResult> Flights()
+        {
+            if (ModelState.IsValid)
+            {
+                var flights = await DAL.Get_flights();
+                return Ok(flights);
+            }
+            return new JsonResult("Something went wrong") { StatusCode = 500 };
+        }
+
         [HttpGet]
         [Route("flightsDeals")]
-        public async Task<IActionResult> flightsDeals()
+        public async Task<IActionResult> FlightsDeals()
         {
             if (ModelState.IsValid)
             {
@@ -36,7 +49,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("flightsByRoute")]
-        public async Task<IActionResult> flightsByRoute(RouteReq route)
+        public async Task<IActionResult> FlightsByRoute(RouteReq route)
         {
             if (ModelState.IsValid)
             {
