@@ -281,7 +281,7 @@ namespace api
                     flights.Add(flight);
                 }
                 con.Close();
-                foreach (var flight in flights)
+                foreach (FlightResponse flight in flights)
                 {
                     query = @"SELECT place FROM scale WHERE scale.route_id = " +
                         "(SELECT " + "\"Id\"" + " FROM rute WHERE rute.departure = '" + flight.Departure + "' AND rute.arrival = '" + flight.Arrival + "');";
@@ -295,8 +295,7 @@ namespace api
                         scales.Add((string)o[0]);
                     }
 
-                    for (int i = 0; i < flights.Count; i++)
-                        flights[i].Scale = scales;
+                    flights[flights.FindIndex(u => u.Id == flight.Id)].Scale = scales;
 
                     con.Close();
                 }
@@ -414,8 +413,7 @@ namespace api
                         scales.Add((string)o[0]);
                     }
 
-                    for (int i = 0; i < flights.Count; i++)
-                        flights[i].Scale = scales;
+                    flights[flights.FindIndex(u => u.Id == flight.Id)].Scale = scales;
 
                     con.Close();
                 }
