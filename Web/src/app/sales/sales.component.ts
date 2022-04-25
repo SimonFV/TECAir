@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../services/api.service';
 import { ComunicationService } from '../services/comunication/comunication.service';
 
 @Component({
@@ -10,23 +11,29 @@ export class SalesComponent implements OnInit {
   sales=[{"From":"",
   "To": "",
   "Discount": ""}];
-  /*{"From": "SJO", "To": "CUN", "Discount": "32" },
-  {"From": "SJO", "To": "NYC", "Discount": "5" },
-  { "From": "CUN", "To": "NYC", "Discount": "15"}*/
-  constructor(private salesService: ComunicationService) { }
+  constructor(private service: ApiService) { }
   
   ngOnInit(): void {
     this.sales.splice(0,1);
-    /*this.salesService.sales.subscribe(resp=>{
-      console.log("CLI");
-      loadPromos(resp)
-    })*/
+    this.service.getDeal().subscribe(resp=>{
+      console.log(resp.body);
+      for (let i in resp.body) {
+        if (resp.body[i].deals != 0) {
+          this.loadDeals(resp.body[i]);
+        }
+      }
+    })
   }
-  loadPromos(_sales: Array<any>){
+  loadDeals(_sales: any){
     console.log("LOAD");
-    /*
-    this.sales=_sales;
-    console.log(this.sales);*/
+    this.sales.push({
+      "From": deals.departure,
+      "To": deals.arrival,
+      "scales":deals.scale,
+      "idFlight": deals.id,
+      "Discount": deals.deals
+    })
+    this.add=true;
     
   }
 

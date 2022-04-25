@@ -22,10 +22,11 @@ export class CheckInComponent implements OnInit {
       this.setFlightId(resp.flightId);
     })
     this.form=this.formBuilder.group({
-      Email: ['',[]],
-      IdFlight: ['', []],
-      Seat: ['',[]]
-    })
+      email: ['', []],
+      idFlight: ['', []],
+      seat: ['', []],
+      status: ['checked', []]
+    });
   }
   setFlightId(i:number){
     console.log(i);
@@ -35,15 +36,24 @@ export class CheckInComponent implements OnInit {
   
   getData(){
     
-    this.IdFlight?.setValue(Number(this.IdFlight?.value));
+    this.idFlight?.setValue(Number(this.idFlight?.value));
     console.log(this.form.value);
-    this.service.postBook(this.form.value).subscribe(resp=>{
+    this.service.putCheckIn(this.form.value).subscribe(resp=>{
       console.log(resp);
-      
+      if(resp.status==200){
+        this.alert('Checked!','success');
+      }
     })
   }
-  get IdFlight(){
-    return this.form.get('IdFlight')
+  get idFlight(){
+    return this.form.get('idFlight')
+  }
+  alert(message:string, type: string){
+    const alertPlaceholder = document.getElementById('alertDiv')!
+    var wrapper = document.createElement('div')
+    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
+      '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    alertPlaceholder.appendChild(wrapper)
   }
 
 }
