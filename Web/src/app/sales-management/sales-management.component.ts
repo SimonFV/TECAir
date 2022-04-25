@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ApiService } from '../services/api.service';
 import { ComunicationService } from '../services/comunication/comunication.service';
 
 @Component({
@@ -13,6 +14,7 @@ export class SalesManagementComponent implements OnInit {
   sales=[{"From":"",
   "To": "",
   "idFlight":0 ,
+  "scales":[],
   "Discount": ""}];
   
 
@@ -22,12 +24,10 @@ export class SalesManagementComponent implements OnInit {
   add=false;
   edit=false;
   constructor(private formBuilder: FormBuilder,
-    private salesService: ComunicationService) { }
+    private service: ApiService
+    ) { }
 
   ngOnInit(): void {
-    this.salesService.sales.emit({
-      data: this.sales
-    });
     this.deletePromo(0);
     this.form=this.formBuilder.group({
       From:['',[]],
@@ -42,27 +42,52 @@ export class SalesManagementComponent implements OnInit {
       Discount:['',[]],
     });
 
+    this.service.getDeal().subscribe(resp=>{
+      console.log(resp.body);
+      for (let i in resp.body) {
+        if (resp.body[i].deals != 0) {
+          this.loadDeals(resp.body[i]);
+        }
+      }
+    })
   }
-  addPromo(){
+
+  loadDeals(deals:any){
+    this.sales.push({
+      "From": deals.departure,
+      "To": deals.arrival,
+      "scales":deals.scale,
+      "idFlight": deals.id,
+      "Discount": deals.deals
+    })
     this.add=true;
+    
+  }
+
+
+  addPromo(){
+   
     
     this.sales.push(
       {
         "From":this.form.value.From,
         "To": this.form.value.To,
+        "scales":[],
         "idFlight":Number(this.form.value.idFlight) ,
         "Discount": this.form.value.Discount
       }
     )
-    console.log(this.sales);
-    this.salesService.sales.emit({
-      data: this.sales
-    });
+    this.service.putDeal({
+      "idFlight": Number(this.form.value.idFlight),
+      "deal":Number(this.form.value.Discount)
+    }).subscribe(resp=>{
+      console.log(resp);
+      
+    })
   }
   deletePromo(i: number){
     this.sales.splice(i,1);
     console.log("DELETE: "+this.sales);
-    this.salesService.sales.emit(this.sales);
   }
   editPromo(i:number, flag:boolean){
     if(!flag){
@@ -71,8 +96,13 @@ export class SalesManagementComponent implements OnInit {
       this.sales[i]=this.temp.value;
       this.edit=!this.edit;
     }
-    console.log("EDIT: "+this.sales);
-    this.salesService.sales.emit(this.sales);
+    this.service.putDeal({
+      "idFlight": Number(this.form.value.idFlight),
+      "deal":Number(this.form.value.Discount)
+    }).subscribe(resp=>{
+      console.log(resp);
+      
+    })
     
   }
 
