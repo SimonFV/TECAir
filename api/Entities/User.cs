@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace api.Entities
 {
+    // User Structue
     public class User : IdentityUser<int>
     {
         public User()
@@ -14,12 +15,17 @@ namespace api.Entities
             Baggages = new HashSet<Baggage>();
             Books = new HashSet<Book>();
         }
-
+        // SSN
         public int? Ssn { get; set; }
+        // First Name of the User
         public string? FirstName { get; set; }
+        // First Last Name of the User
         public string? LastName1 { get; set; }
+        // Second Last Name of the User
         public string? LastName2 { get; set; }
+        // University of the User
         public string? University { get; set; }
+        // User School ID
         public int? Schoolid { get; set; }
 
 

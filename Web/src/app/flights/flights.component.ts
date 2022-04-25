@@ -12,20 +12,20 @@ import { UserService } from '../services/userManagment/user.service';
   styleUrls: ['./flights.component.css']
 })
 export class FlightsComponent implements OnInit {
-  public form!: FormGroup;
-  public usr!: FormGroup;
-  private usrToken: any;
-  private usrRole: any;
-  private usrEmail: any;
-  show=false;
-  reserve=false;
+  public form!: FormGroup;//Formulario utilizado para capturar los datos requeridos
+  public usr!: FormGroup;//Formulario utilizado para capturar los datos requeridos
+  private usrToken: any;//Token de usuario actual
+  private usrRole: any;//Rol de usuario actual
+  private usrEmail: any;//Email de usuario actual
+  show=false;//Flag utilizada por ngIf
+  reserve=false;//Flag utilizada por ngIf
   flights=[{"departure":"",
             "arrival":"",
             "scales":[],
             "Plane":"",
             "Schedule": "",
             "ID":0
-          }];
+          }];//Formulario utilizado para mostrar los datos introducidos en la vista
   constructor(private formBuilder: FormBuilder,
     private usrManagment: UserService,
     private service: ApiService,
@@ -52,7 +52,7 @@ export class FlightsComponent implements OnInit {
       status: ['paid', []]
     });
   }
-
+  //Funcion para recuperar datos del usuario
   usrInfo(_token: string, _role: string, _email:string) {
 
     this.usrRole = _role;
@@ -62,6 +62,7 @@ export class FlightsComponent implements OnInit {
     
 
   }
+  //Funcion para capturar y enviar los datos introducidos en el formulario
   getData(flag: boolean) {
     if(flag){
       this.service.postRoute(this.form.value).subscribe(resp => {
@@ -84,6 +85,7 @@ export class FlightsComponent implements OnInit {
     
     console.log(this.form.value);
   }
+  //Funcion para rellenar los datos introducidos en el formulario
   insertData(data:Array<any>){
    for (let i in data) {
      this.flights.push({
@@ -98,6 +100,8 @@ export class FlightsComponent implements OnInit {
     console.log(this.flights);
     
   }
+
+//Funcion que introduce una alerta dentro de la vista
   alert(message:string, type: string){
     const alertPlaceholder = document.getElementById('alertDiv')!
     var wrapper = document.createElement('div')
@@ -105,6 +109,7 @@ export class FlightsComponent implements OnInit {
       '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
     alertPlaceholder.appendChild(wrapper)
   }
+  //Funcion para realizar la reserva del vuelo
   reserveFlight(flag:boolean){
     if(!flag){
       this.service.postReserveFlight(this.usr.value).subscribe(resp=>{

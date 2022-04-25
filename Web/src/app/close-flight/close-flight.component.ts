@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./close-flight.component.css']
 })
 export class CloseFlightComponent implements OnInit {
-  public form! :FormGroup
+  public form! :FormGroup//Formulario utilizado para capturar los datos requeridos
   constructor(private formBuilder:FormBuilder) { }
 
   ngOnInit(): void {
@@ -16,10 +16,12 @@ export class CloseFlightComponent implements OnInit {
       Status: ['',[  ]]
     });
   }
+  //Funcion para capturar y enviar los datos introducidos en el formulario
   getData(){
     console.log(this.form.value);
     
   }
+    //Funcion que introduce una alerta dentro de la vista
   alert(message:string, type: string){
     const alertPlaceholder = document.getElementById('alertDiv')!
     var wrapper = document.createElement('div')

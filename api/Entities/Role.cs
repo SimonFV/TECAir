@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace api.Entities
 {
+    // Role Structure
     public class Role : IdentityRole<int>
     {
     }

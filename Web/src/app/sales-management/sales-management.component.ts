@@ -9,26 +9,22 @@ import { ComunicationService } from '../services/comunication/comunication.servi
   styleUrls: ['./sales-management.component.css']
 })
 export class SalesManagementComponent implements OnInit {
-  public form!: FormGroup;
-  public temp!: FormGroup;
+  public form!: FormGroup;//Formulario utilizado para capturar los datos requeridos
+  public temp!: FormGroup;//Formulario utilizado para capturar los datos requeridos
   sales=[{"From":"",
   "To": "",
   "idFlight":0 ,
   "scales":[],
-  "Discount": ""}];
+  "Discount": ""}];// Lista utilizada para mostrar los datos en la vista
   
-
-  from="";
-  to="";
-  discount="";
-  add=false;
-  edit=false;
+  add=false;//Flag utilizado por ngIf
+  edit=false;//Flag utilizado por ngIf
   constructor(private formBuilder: FormBuilder,
     private service: ApiService
     ) { }
 
   ngOnInit(): void {
-    this.deletePromo(0);
+    this.sales.splice(0,1);
     this.form=this.formBuilder.group({
       From:['',[]],
       To:['',[]],
@@ -51,7 +47,7 @@ export class SalesManagementComponent implements OnInit {
       }
     })
   }
-
+//Funcion utilizada para cargar las promociones existentes en la vista
   loadDeals(deals:any){
     this.sales.push({
       "From": deals.departure,
@@ -64,10 +60,8 @@ export class SalesManagementComponent implements OnInit {
     
   }
 
-
+//Funcion utilizada para añadir y enviar las promociones 
   addPromo(){
-   
-    
     this.sales.push(
       {
         "From":this.form.value.From,
@@ -85,15 +79,25 @@ export class SalesManagementComponent implements OnInit {
       
     })
   }
+  //Funcion utilizada para eliminar y enviar las promociones 
   deletePromo(i: number){
-    this.sales.splice(i,1);
+    
     console.log("DELETE: "+this.sales);
+    this.service.putDeal({
+      "idFlight":this.sales[i].idFlight,
+      "deal":0
+    }).subscribe(resp=>{
+      console.log(resp);
+      
+    })
+    this.sales.splice(i,1);
   }
+  //Funcion utilizada para editar y enviar las promociones 
   editPromo(i:number, flag:boolean){
     if(!flag){
       this.edit=!this.edit;
     }else{
-      this.sales[i]=this.temp.value;
+      this.sales[i]=this.form.value;
       this.edit=!this.edit;
     }
     this.service.putDeal({
@@ -101,7 +105,6 @@ export class SalesManagementComponent implements OnInit {
       "deal":Number(this.form.value.Discount)
     }).subscribe(resp=>{
       console.log(resp);
-      
     })
     
   }

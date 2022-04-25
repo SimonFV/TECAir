@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace api.Entities
 {
+    // School ID Structure
     public partial class Schoolid
     {
         public Schoolid()
@@ -12,7 +13,9 @@ namespace api.Entities
             Users = new HashSet<User>();
         }
 
+        // College ID
         public int Number { get; set; }
+        // Accumulate Miles
         public int Mile { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
