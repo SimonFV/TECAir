@@ -72,7 +72,6 @@ namespace api.Data
                 entity.Property(e => e.Status).HasColumnName("status");
 
                 entity.Property(e => e.Seat)
-                    .IsRequired()
                     .HasColumnName("seat");
 
                 entity.HasOne(d => d.IdFlightNavigation)
