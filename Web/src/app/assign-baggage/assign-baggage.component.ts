@@ -8,7 +8,7 @@ import { ApiService } from '../services/api.service';
   styleUrls: ['./assign-baggage.component.css']
 })
 export class AssignBaggageComponent implements OnInit {
-  public form!: FormGroup;
+  public form!: FormGroup; //Formulario utilizado para capturar los datos requeridos
   constructor(
     private formBuilder: FormBuilder,
     private service: ApiService
@@ -21,6 +21,7 @@ export class AssignBaggageComponent implements OnInit {
       color: ['', []]
     })
   }
+  //Funcion para capturar y enviar los datos introducidos en el formulario
   getData(){
     console.log(this.form.value);
     this.service.postBaggage(this.form.value).subscribe(resp=>{
@@ -30,6 +31,7 @@ export class AssignBaggageComponent implements OnInit {
       }
     })
   }
+  //Funcion que introduce una alerta dentro de la vista
   alert(message:string, type: string){
     const alertPlaceholder = document.getElementById('alertDiv')!
     var wrapper = document.createElement('div')

@@ -10,7 +10,7 @@ import { UserService } from '../services/userManagment/user.service';
   styleUrls: ['./init.component.css']
 })
 export class InitComponent implements OnInit {
-  public form!: FormGroup;
+  public form!: FormGroup;//Formulario utilizado para capturar los datos requeridos
   constructor(private formBuilder: FormBuilder,
     private service: ApiService,
     private router: Router,
@@ -19,9 +19,9 @@ export class InitComponent implements OnInit {
     
   }
   
-  public token: any;
-  data:any=[];
-  student:boolean=false;
+  public token: any;//Tocken del usuario actual
+  data:any=[];//Lista utilizada para enviar los datos del usuario
+  student:boolean=false;//Flag para saber si el usuario actual es un estudiante
   ngOnInit(): void {
     this.form= this.formBuilder.group({
       FirstName: ['',[Validators.required]],
@@ -38,9 +38,8 @@ export class InitComponent implements OnInit {
     });
     
   }
+  //Funcion para capturar y enviar los datos introducidos en el formulario
   getData(){
-    
-    
     if(this.form.value.Role!="Student"){
       this.form.value.SchoolId=null;
       this.form.value.University=null
@@ -49,8 +48,6 @@ export class InitComponent implements OnInit {
       console.log(resp.status);
       
       this.readResp(resp.body);
-      
-      
     }, err=>{
       for (let e of err.error.errors){
         this.alert(e,'danger')
@@ -59,6 +56,8 @@ export class InitComponent implements OnInit {
     })
     console.log(this.form.value);
   }
+  
+//Funcion que introduce una alerta dentro de la vista
   alert(message:string, type: string){
     const alertPlaceholder = document.getElementById('alertDiv')!
     var wrapper = document.createElement('div')
@@ -66,6 +65,8 @@ export class InitComponent implements OnInit {
       '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
     alertPlaceholder.appendChild(wrapper)
   }
+
+  //Funcion utilizada para leer la respuesta del API
   readResp(response:any){
     this.data=<JSON>response;
     this.token=this.data.token
@@ -82,6 +83,14 @@ export class InitComponent implements OnInit {
     
   }
 
+//Funciones para añadir y eliminar los campos del formulario dedicados a estudiantes
+  addStudent(){
+    this.student=true;
+  }
+  deleteStudent(){
+    this.student=false;
+  }
+//Gatters de los atributos del formulario
   get SchoolId(){
     return this.form.get('SchoolId') ;
   }
@@ -90,13 +99,6 @@ export class InitComponent implements OnInit {
   }
   get Role(){
     return this.form.get('Role') 
-  }
-  addStudent(){
-    this.student=true;
-  }
-  
-  deleteStudent(){
-    this.student=false;
   }
 }
 

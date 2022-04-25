@@ -9,7 +9,7 @@ import { ComunicationService } from '../services/comunication/comunication.servi
   styleUrls: ['./check-in.component.css']
 })
 export class CheckInComponent implements OnInit {
-  public form!: FormGroup;
+  public form!: FormGroup;//Formulario utilizado para capturar los datos requeridos
   constructor(
     private formBuilder :FormBuilder,
     private comunication: ComunicationService,
@@ -17,10 +17,6 @@ export class CheckInComponent implements OnInit {
     ) { }
     id: any;
   ngOnInit(): void {
-    
-    this.comunication.checkIn.subscribe(resp=>{
-      this.setFlightId(resp.flightId);
-    })
     this.form=this.formBuilder.group({
       email: ['', []],
       idFlight: ['', []],
@@ -28,14 +24,8 @@ export class CheckInComponent implements OnInit {
       status: ['checked', []]
     });
   }
-  setFlightId(i:number){
-    console.log(i);
-    this.id=i;
-    
-  }
-  
+  //Funcion para capturar y enviar los datos introducidos en el formulario
   getData(){
-    
     this.idFlight?.setValue(Number(this.idFlight?.value));
     console.log(this.form.value);
     this.service.putCheckIn(this.form.value).subscribe(resp=>{
@@ -45,9 +35,13 @@ export class CheckInComponent implements OnInit {
       }
     })
   }
+
+  //Getter del atributo idFlight del formulario
   get idFlight(){
     return this.form.get('idFlight')
   }
+
+  //Funcion que introduce una alerta dentro de la vista
   alert(message:string, type: string){
     const alertPlaceholder = document.getElementById('alertDiv')!
     var wrapper = document.createElement('div')

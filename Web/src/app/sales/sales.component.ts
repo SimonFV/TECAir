@@ -9,16 +9,17 @@ import { ComunicationService } from '../services/comunication/comunication.servi
   styleUrls: ['./sales.component.css']
 })
 export class SalesComponent implements OnInit {
-  public usr!: FormGroup;
-  reserve = false;
+  public usr!: FormGroup;//Formulario utilizado para capturar los datos requeridos
+  reserve = false;// Flag utilizado por ngIf
+  add = false;// Flag utilizado por ngIf
   sales = [{
     "From": "",
     "To": "",
     "scales": [],
     "idFlight": "",
     "Discount": ""
-  }];
-  add = false;
+  }];//Lista utilizada para mostrar los datos en la vista
+  
   constructor(
     private service: ApiService,
     private formBuilder: FormBuilder
@@ -41,6 +42,8 @@ export class SalesComponent implements OnInit {
       status: ['paid', []]
     });
   }
+
+  //Funcion para cargar las promociones existentes
   loadDeals(deals: any) {
     console.log("LOAD");
     this.sales.push({
@@ -51,8 +54,8 @@ export class SalesComponent implements OnInit {
       "Discount": deals.deals
     })
     this.add = true;
-
   }
+  //Funcion para realizar la reserva de un vuelo
   reserveFlight(flag: boolean) {
     
     if (this.reserve) {
@@ -67,6 +70,7 @@ export class SalesComponent implements OnInit {
     this.reserve = !this.reserve
 
   }
+  //Funcion que introduce una alerta dentro de la vista
   alert(message: string, type: string) {
     const alertPlaceholder = document.getElementById('alertDiv')!
     var wrapper = document.createElement('div')
