@@ -16,6 +16,7 @@ export class OpnFlightComponent implements OnInit {
   ngOnInit(): void {
     this.form= this.formBuilder.group({
       PlaneId: ['',[  ]],
+      Gate: ['',[  ]],
       Departure: ['',[]],
       Scale: this.formBuilder.array([]),
       Arrival: ['',[]]
@@ -28,15 +29,22 @@ export class OpnFlightComponent implements OnInit {
 
 
   getData(){
-    console.log(this.Scale.value[0].Scale);
     for(let stop in this.Scale.value){
       this.Scale.value[stop]=this.Scale.value[stop].Scale;
     }
-    console.log(this.Scale.value[0].Scale);
     
-    /*this.service.postAdd(this.form.value).subscribe(resp=>{
+    this.service.postAddFlight(this.form.value).subscribe(resp=>{
       console.log(resp);
-    })*/
+      if(resp.status==200){
+        this.alert('Flight Registered!','success');
+      }else{
+        
+        
+        this.alert(resp.errors, 'danger');
+      }
+    },err=>{
+      console.log(err.error.errors);
+    })
     console.log(this.form.value);
     
   }
@@ -48,6 +56,13 @@ export class OpnFlightComponent implements OnInit {
   }
   deleteStop(i: number){
     this.Scale.removeAt(i);
+  }
+  alert(message:string, type: string){
+    const alertPlaceholder = document.getElementById('alertDiv')!
+    var wrapper = document.createElement('div')
+    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
+      '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    alertPlaceholder.appendChild(wrapper)
   }
 
 }

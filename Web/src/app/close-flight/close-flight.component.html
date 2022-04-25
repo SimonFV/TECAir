@@ -1,1 +1,23 @@
 <app-nav-admin></app-nav-admin>
+<div class="text-center mt-5 col-auto  d-grid col-9 mx-auto">
+    <h2>Close Flight </h2>
+</div>
+<form [formGroup]="form" (submit)="getData()">
+    <div class="col-auto mt-3  col-6 mx-auto">
+        <div class="form-floating">
+            <input id="airplane ID" class="form-control" type="text" formControlName="IdFlight"
+                placeholder="Airplane ID">
+            <label for="floatingInput">Flight ID</label>
+        </div>
+        <div class="form-floating mt-2">
+            <input id="Gate" class="form-control" type="text" formControlName="Status"
+                placeholder="Gate">
+            <label for="floatingInput">Status</label>
+        </div>
+        <div class="text-center mt-3" id="alertDiv"> </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Close</button>
+    </div>
+</form>

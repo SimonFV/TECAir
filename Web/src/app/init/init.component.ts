@@ -71,7 +71,8 @@ export class InitComponent implements OnInit {
     this.token=this.data.token
     this.usrManagment.trigger.emit({
       tok:this.data.token,
-      role:this.data
+      role:this.data.role,
+      email:this.form.value.Email
     });
     if(this.data.role=="Employee"){
       this.router.navigate(["/airport"]);

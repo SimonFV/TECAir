@@ -56,7 +56,8 @@ export class SignInComponent implements OnInit {
     
     this.usrManagment.trigger.emit({
       tok:this.data.token,
-      role: this.data.role
+      role: this.data.role,
+      email: this.form.value.Email
     });
     if(this.data.role=="Employee"){
       this.router.navigate(["/airport"]);
