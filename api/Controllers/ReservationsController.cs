@@ -10,6 +10,10 @@ using System;
 
 namespace api.Controllers
 {
+    /* 
+    Reservations Controller
+    Controller responsible for the management of the reservations information.
+    */
     [ApiController]
     [Route("[controller]")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -22,10 +26,17 @@ namespace api.Controllers
             _context = context;
         }
 
-
+        /* 
+        Get Seats Flight
+        POST for retreiving all the seats taken in a flight.
+        @param:
+            int: id of the flight
+        @return:
+            List of the seats in the flight.
+        */
         [HttpPost]
         [Route("getSeatsFlight/{id}")]
-        public async Task<IActionResult> RetSeatsFlight(int id)
+        public async Task<IActionResult> GetSeatsFlight(int id)
         {
             if (ModelState.IsValid)
             {
@@ -43,6 +54,14 @@ namespace api.Controllers
             return new JsonResult("Invalid value for id.") { StatusCode = 500 };
         }
 
+        /* 
+        Reserve Flight
+        POST for making a reservation for a flight.
+        @param:
+            BookDto: DTO with the user and flight information.
+        @return:
+            Result of the operation
+        */
         [HttpPost]
         [Route("reserveFlight")]
         public async Task<IActionResult> ReserveFlight(BookDto book)
@@ -67,6 +86,14 @@ namespace api.Controllers
             return new JsonResult("Invalid model for book.") { StatusCode = 500 };
         }
 
+        /* 
+        Checkin
+        POST for making a checkin for a user.
+        @param:
+            BookDto: DTO with the user and flight information.
+        @return:
+            Result of the operation
+        */
         [HttpPut]
         [Route("checkin")]
         public async Task<IActionResult> Checkin(BookDto book)
@@ -91,6 +118,14 @@ namespace api.Controllers
             return new JsonResult("Invalid model for book.") { StatusCode = 500 };
         }
 
+        /* 
+        Add Baggage
+        POST for adding baggage for a user.
+        @param:
+            BaggageDto: DTO with the user and bag information.
+        @return:
+            Result of the operation
+        */
         [HttpPost]
         [Route("addBaggage")]
         public async Task<IActionResult> AddBaggage(BaggageDto bag)
@@ -114,42 +149,6 @@ namespace api.Controllers
 
             return new JsonResult("Invalid model for baggage.") { StatusCode = 500 };
         }
-
-        /*
-
-       [HttpPut("items/{id}")]
-       public async Task<IActionResult> UpdateItem(int id, ItemData item)
-       {
-           if (id != item.Id)
-               return BadRequest();
-
-           var existItem = await _context.Items.FirstOrDefaultAsync(x => x.Id == id);
-
-           if (existItem == null)
-               return NotFound();
-
-           existItem.Title = item.Title;
-           existItem.Description = item.Description;
-           existItem.Done = item.Done;
-           await _context.SaveChangesAsync();
-
-           return NoContent();
-       }
-
-       [HttpDelete("items/{id}")]
-       public async Task<IActionResult> DeleteItem(int id)
-       {
-           var existItem = await _context.Items.FirstOrDefaultAsync(x => x.Id == id);
-
-           if (existItem == null)
-               return NotFound();
-
-           _context.Items.Remove(existItem);
-           await _context.SaveChangesAsync();
-
-           return Ok(existItem);
-       }
-       */
 
     }
 }

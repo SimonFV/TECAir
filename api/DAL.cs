@@ -367,7 +367,7 @@ namespace api
             return flights;
         }
 
-        /* 
+        /*
         Get Flight by Deals
         Returns all flights who have deals in the database.
         @param: void

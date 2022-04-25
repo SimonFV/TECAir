@@ -18,6 +18,11 @@ using System.Linq;
 
 namespace api.Controllers
 {
+    /* 
+    Authentication Controller
+    Controller responsible for the management of the user account information,
+    like authentication and registration.
+    */
     [ApiController]
     [Route("[controller]")]
     public class AuthenticationController : ControllerBase
@@ -39,6 +44,14 @@ namespace api.Controllers
             _jwtConfig = optionsMonitor.CurrentValue;
         }
 
+        /* 
+        Register
+        POST for registration of users. Saves the information received in the database.
+        @param:
+            UserRegistrationDto: DTO for user information about registration.
+        @return: 
+            AuthResult object with the result of the registration process.
+        */
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationDto user)
@@ -121,6 +134,15 @@ namespace api.Controllers
             });
         }
 
+
+        /* 
+        Login
+        POST for authentication of users.
+        @param:
+            UserLoginDto: DTO for user information about authentication.
+        @return:
+            AuthResult object with the result of the authentication process.
+        */
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto user)
@@ -173,6 +195,15 @@ namespace api.Controllers
             });
         }
 
+        /* 
+        Generate Jwt Token
+        Method that generates a token for an authenticated user. This token can be use
+        to make further requests to the API.
+        @param:
+            User: Object that holds the information about the user.
+        @return:
+            A unique token (string) for the user.
+        */
         private string GenerateJwtToken(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
