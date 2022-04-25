@@ -6,6 +6,7 @@
                 <div class="card ">
                     <div class="card-body ">
                         <h5 class="card-title">{{flight.From}} &#8594; {{flight.To}}</h5>
+                        <p class="card-text">Flight ID {{flight.idFlight}}</p>
                         <p class="card-text">With -{{flight.Discount}}% off</p>
                         <div class="col-auto text-center">
                             <button type="button" class="btn btn-outline-primary" (click)="editPromo(i,false)">Edit</button>
@@ -44,6 +45,10 @@
             <div required class="form-floating mb-1">
                 <input formControlName="To" type="To" class="form-control" id="to" placeholder="To">
                 <label for="floatingInput">To</label>
+            </div>
+            <div required class="form-floating mb-1">
+                <input formControlName="idFlight" type="idFlight" class="form-control" id="idFlight" placeholder="idFlight">
+                <label for="floatingInput">Flight ID</label>
             </div>
             <div  required class="form-floating mb-3">
                 <input formControlName="Discount" type="Discount" class="form-control" id="discount" placeholder="Discount">

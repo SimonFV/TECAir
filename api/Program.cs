@@ -16,10 +16,18 @@ namespace api
     {
         public static void Main(string[] args)
         {
+/*
+            DAL.Insert_rute("JFK", new List<string>() { }, "SJO", 556);
+            DAL.Insert_rute("JFK", new List<string>() {"MEX","SLV" }, "SJO", 556);
+            DAL.Insert_rute("JFK", new List<string>() {"HOU" }, "LAX", 556);
+            DAL.Insert_rute("SJO", new List<string>() { }, "JFK", 556);
+            DAL.Insert_rute("SJO", new List<string>() {"SLV","MEX","HOU" }, "JFK", 556);
 
-            //DAL.Insert_rute("JFK", new List<string>() { }, "SJO", 556);
-
-            //DAL.Insert_plane("QD21", 68, "boeing 737");
+            DAL.Insert_plane("QD21", 70, "boeing 737");
+            DAL.Insert_plane("AX54", 68, "airbus a320");
+            DAL.Insert_plane("SH84", 95, "boeing 737");
+            DAL.Insert_plane("FN57", 80, "airbus a320");
+            DAL.Insert_plane("JV54", 75, "boeing 737");*/
             //var result = DAL.Insert_flight("QD21", "JFK", "SJO", "2", new DateTime(2022, 4, 26, 7, 45, 0)).Result;
             /*
             DAL.Insert_rute(1, "SJO", "MEX", "JFK", 2560);

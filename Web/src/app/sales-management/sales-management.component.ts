@@ -12,6 +12,7 @@ export class SalesManagementComponent implements OnInit {
   public temp!: FormGroup;
   sales=[{"From":"",
   "To": "",
+  "idFlight":0 ,
   "Discount": ""}];
   
 
@@ -31,11 +32,13 @@ export class SalesManagementComponent implements OnInit {
     this.form=this.formBuilder.group({
       From:['',[]],
       To:['',[]],
+      idFlight:['',[]],
       Discount:['',[]],
     });
     this.temp=this.formBuilder.group({
       From:['',[]],
       To:['',[]],
+      idFlight:['',[]],
       Discount:['',[]],
     });
 
@@ -47,6 +50,7 @@ export class SalesManagementComponent implements OnInit {
       {
         "From":this.form.value.From,
         "To": this.form.value.To,
+        "idFlight":Number(this.form.value.idFlight) ,
         "Discount": this.form.value.Discount
       }
     )

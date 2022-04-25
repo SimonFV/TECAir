@@ -18,12 +18,25 @@ export class ApiService {
     let header = new HttpHeaders().set('Type-contet', 'aplication/json');
     return this.http.post<JSON[]>('http://localhost:5001/Authentication/login', user, { headers: header, observe:'response'});
   }
-  postAdd(flight: JSON):Observable<any>{
+  postAddFlight(flight: JSON):Observable<any>{
     let header = new HttpHeaders().set('Type-contet', 'aplication/json');
-    return this.http.post<JSON[]>('http://localhost:5001/Flights/add', flight, { headers: header, observe:'response'});
+    return this.http.post<JSON[]>('http://localhost:5001/Flights/addFlight', flight, { headers: header, observe:'response'});
   }
   postRoute(route: JSON):Observable<any>{
     let header = new HttpHeaders().set('Type-contet', 'aplication/json');
     return this.http.post<JSON[]>('http://localhost:5001/Flights/flightsByRoute', route, { headers: header, observe:'response'});
   }
+  postBook(book: JSON):Observable<any>{
+    let header = new HttpHeaders().set('Type-contet', 'aplication/json');
+    return this.http.post<JSON[]>('http://localhost:5001/Reservations/addBook', book, { headers: header, observe:'response'});
+  }
+  postReserveFlight(user: JSON):Observable<any>{
+    let header = new HttpHeaders().set('Type-contet', 'aplication/json');
+    return this.http.post<JSON[]>('http://localhost:5001/Reservations/ReserveFlight', user, { headers: header, observe:'response'});
+  }
+  postBaggage(bag: JSON):Observable<any>{
+    let header = new HttpHeaders().set('Type-contet', 'aplication/json');
+    return this.http.post<JSON[]>('http://localhost:5001/Reservations/ReserveFlight', bag, { headers: header, observe:'response'});
+  }
+  
 }
